@@ -7,8 +7,6 @@ from PyQt5.QtWidgets import QApplication, QHBoxLayout, QLineEdit, QWidget, QVBox
 import numpy as np
 import scipy.signal as ss
 
-
-from matplotlib import pyplot as plt
 from matplotlib.figure import Figure
 from matplotlib.backends.backend_qt5agg import FigureCanvas, NavigationToolbar2QT
 
@@ -16,7 +14,7 @@ class PlotWidget(QWidget):
     def __init__(self, parent=None):
         super().__init__(parent)
 
-        #  create widgets
+        #  Create widgets
         self.canvas = FigureCanvas(Figure())
         # self.canvas = FigureCanvas(Figure(figsize=(5, 3)))
         self.axes = self.canvas.figure.subplots()
@@ -36,7 +34,7 @@ class PlotWidget(QWidget):
         vlayout.addLayout(input_layout)
         self.setLayout(vlayout)
 
-        # connect inputs with on_change method
+        # Connect inputs with on_change method
         self.x_input.textChanged.connect(self._update_label)
         self.y_input.textChanged.connect(self._update_label)
 
@@ -49,7 +47,7 @@ class PlotWidget(QWidget):
         self.axes.clear()
         self.canvas.draw()
 
-    def drawModule(self, H, *args, freq='hertz', **kargs):
+    def drawModule(self, H, *args, freq='rad', **kargs):
         try:
 
             eje, modulo, fase = ss.bode(H)      # Calculo del Bode (La fase no se usa)
@@ -83,7 +81,7 @@ class PlotWidget(QWidget):
         except:
             print('Entrada inválida')
 
-        # self.drawModule(ss.TransferFunction([1,0], [1/100,1,1]), linestyle='-', linewidth=2)
+        self.drawModule(ss.TransferFunction([1,0,1], [1,4,1]), linestyle='-', linewidth=2)
 
 
 
