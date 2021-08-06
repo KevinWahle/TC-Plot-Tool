@@ -2,7 +2,7 @@
 # -------------------- PlotWidget.py --------------------
 # ------------------------------------------------------
 import sys
-from PyQt5.QtWidgets import QApplication, QHBoxLayout, QLineEdit, QWidget, QVBoxLayout
+from PyQt5.QtWidgets import QAction, QApplication, QHBoxLayout, QLineEdit, QWidget, QVBoxLayout
 
 import numpy as np
 import scipy.signal as ss
@@ -26,9 +26,12 @@ class PlotWidget(QWidget):
 
         #  Create layout
         input_layout = QHBoxLayout()
+        input_layout.setContentsMargins(0,0,0,0)
+
         input_layout.addWidget(self.x_input)
         input_layout.addWidget(self.y_input)
         vlayout = QVBoxLayout()
+        vlayout.setContentsMargins(0,0,0,0)
         vlayout.addWidget(self.toolbar)
         vlayout.addWidget(self.canvas)
         vlayout.addLayout(input_layout)
