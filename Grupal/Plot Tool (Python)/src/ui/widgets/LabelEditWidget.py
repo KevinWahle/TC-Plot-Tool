@@ -1,5 +1,5 @@
 
-from PyQt5.QtWidgets import QApplication, QHBoxLayout, QLineEdit, QVBoxLayout, QWidget
+from PyQt5.QtWidgets import QApplication, QHBoxLayout, QLineEdit, QWidget
 import sys
 
 class LabelEditWidget(QWidget):

@@ -2,7 +2,7 @@
 # -------------------- PlotWidget.py --------------------
 # ------------------------------------------------------
 import sys
-from PyQt5.QtWidgets import QAction, QApplication, QHBoxLayout, QLineEdit, QWidget, QVBoxLayout
+from PyQt5.QtWidgets import QApplication, QWidget, QVBoxLayout
 
 import numpy as np
 import scipy.signal as ss
@@ -10,6 +10,7 @@ import scipy.signal as ss
 from matplotlib.figure import Figure
 from matplotlib.backends.backend_qt5agg import FigureCanvas, NavigationToolbar2QT
 
+# from src.ui.widgets.LabelEditWidget import LabelEditWidget
 from LabelEditWidget import LabelEditWidget
 
 class PlotWidget(QWidget):

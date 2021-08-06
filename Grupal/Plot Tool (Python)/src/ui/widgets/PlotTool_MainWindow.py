@@ -9,6 +9,7 @@
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
+# from src.ui.widgets.PlotWidget import PlotWidget
 from PlotWidget import PlotWidget
 
 
