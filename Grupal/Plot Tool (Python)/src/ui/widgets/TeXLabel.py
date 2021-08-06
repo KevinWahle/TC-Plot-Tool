@@ -6,7 +6,7 @@ from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg
 
 
 class TeXLabel(QWidget):
-    def __init__(self, parent=None):
+    def __init__(self, parent=None, text=''):
         super().__init__(parent)
 
         # Create widgets
@@ -25,7 +25,7 @@ class TeXLabel(QWidget):
         self.fig.clear()
 
         # Set figure title
-        self.fig.suptitle('$FachaTeX\ \oiiint$',
+        self.fig.suptitle(text,
                         x=0.5, y=0.5, 
                         horizontalalignment='center',
                         verticalalignment='center')

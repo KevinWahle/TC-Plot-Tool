@@ -11,7 +11,7 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 
 
-class Ui_Dialog(object):
+class FromFile_Window(object):
     def setupUi(self, Dialog):
         Dialog.setObjectName("Dialog")
         Dialog.resize(406, 120)
@@ -57,7 +57,7 @@ class Ui_Dialog(object):
         self.pathBtn.setAutoFillBackground(True)
         self.pathBtn.setText("")
         icon = QtGui.QIcon()
-        icon.addPixmap(QtGui.QPixmap("fileBtn.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon.addPixmap(QtGui.QPixmap("res/fileBtn.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.pathBtn.setIcon(icon)
         self.pathBtn.setIconSize(QtCore.QSize(40, 40))
         self.pathBtn.setAutoExclusive(False)
@@ -82,6 +82,10 @@ class Ui_Dialog(object):
         self.verticalLayout_2.addWidget(self.verticalWidget)
 
         self.retranslateUi(Dialog)
+
+        self.pathBtn.clicked.connect(self.selectFile)
+        self.okBtn.clicked.connect(self.okBtnClick)
+
         QtCore.QMetaObject.connectSlotsByName(Dialog)
 
     def retranslateUi(self, Dialog):
@@ -94,11 +98,29 @@ class Ui_Dialog(object):
         self.okBtn.setText(_translate("Dialog", "OK"))
 
 
+    def selectFile( self ):
+        ''' Called when the user presses the Browse button
+        '''
+        self.fileName, _ = QtWidgets.QFileDialog.getOpenFileName(
+                        None,
+                        "Select File",
+                        "",
+                        "Text File (*.txt);;CSV File (*.csv);;All Files (*)",
+                        )
+        if self.fileName:
+            self.pathT.setText(self.fileName)
+
+    def okBtnClick(self):
+        # TODO
+        # self.hide()
+        pass
+
+
 if __name__ == "__main__":
     import sys
     app = QtWidgets.QApplication(sys.argv)
     Dialog = QtWidgets.QDialog()
-    ui = Ui_Dialog()
+    ui = FromFile_Window()
     ui.setupUi(Dialog)
     Dialog.show()
     sys.exit(app.exec_())

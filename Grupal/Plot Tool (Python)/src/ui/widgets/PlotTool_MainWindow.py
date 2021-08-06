@@ -17,14 +17,14 @@ class PlotTool_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
         MainWindow.setWindowModality(QtCore.Qt.WindowModal)
-        MainWindow.resize(913, 801)
+        MainWindow.resize(913, 783)
         MainWindow.setMinimumSize(QtCore.QSize(0, 0))
         MainWindow.setUnifiedTitleAndToolBarOnMac(False)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setMinimumSize(QtCore.QSize(0, 750))
         self.centralwidget.setObjectName("centralwidget")
         self.verticalLayout_3 = QtWidgets.QVBoxLayout(self.centralwidget)
-        self.verticalLayout_3.setContentsMargins(-1, 2, -1, 0)
+        self.verticalLayout_3.setContentsMargins(-1, 2, -1, 2)
         self.verticalLayout_3.setSpacing(0)
         self.verticalLayout_3.setObjectName("verticalLayout_3")
         self.verticalLayout_2 = QtWidgets.QVBoxLayout()
@@ -94,7 +94,7 @@ class PlotTool_MainWindow(object):
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.checkRespuesta.sizePolicy().hasHeightForWidth())
         self.checkRespuesta.setSizePolicy(sizePolicy)
-        self.checkRespuesta.setChecked(True)
+        self.checkRespuesta.setChecked(False)
         self.checkRespuesta.setObjectName("checkRespuesta")
         self.horizontalLayout_13.addWidget(self.checkRespuesta)
         self.verticalLayout_7.addWidget(self.horizontalWidget_10)
@@ -118,14 +118,14 @@ class PlotTool_MainWindow(object):
         self.radioButtonF.setChecked(True)
         self.radioButtonF.setObjectName("radioButtonF")
         self.horizontalLayout_12.addWidget(self.radioButtonF)
-        self.radioButton = QtWidgets.QRadioButton(self.horizontalWidget_9)
+        self.radioButtonW = QtWidgets.QRadioButton(self.horizontalWidget_9)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Fixed)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.radioButton.sizePolicy().hasHeightForWidth())
-        self.radioButton.setSizePolicy(sizePolicy)
-        self.radioButton.setObjectName("radioButton")
-        self.horizontalLayout_12.addWidget(self.radioButton)
+        sizePolicy.setHeightForWidth(self.radioButtonW.sizePolicy().hasHeightForWidth())
+        self.radioButtonW.setSizePolicy(sizePolicy)
+        self.radioButtonW.setObjectName("radioButtonW")
+        self.horizontalLayout_12.addWidget(self.radioButtonW)
         self.verticalLayout_7.addWidget(self.horizontalWidget_9)
         self.horizontalLayout.addLayout(self.verticalLayout_7)
         self.verticalWidget_4 = QtWidgets.QWidget(self.horizontalWidget)
@@ -383,9 +383,14 @@ class PlotTool_MainWindow(object):
         self.verticalLayout_3.addLayout(self.verticalLayout_2)
         MainWindow.setCentralWidget(self.centralwidget)
 
-        self.widgetRespuesta.setVisible(False)
+        self.verticalWidget_6.setVisible(False)
 
         self.retranslateUi(MainWindow)
+
+        self.checkAmplitud.stateChanged.connect(lambda state: self.verticalWidget_7.setVisible(state))
+        self.checkFase.stateChanged.connect(lambda state: self.horizontalWidget_6.setVisible(state))
+        self.checkRespuesta.stateChanged.connect(lambda state: self.verticalWidget_6.setVisible(state))
+
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
     def retranslateUi(self, MainWindow):
@@ -396,7 +401,7 @@ class PlotTool_MainWindow(object):
         self.checkAmplitud.setText(_translate("MainWindow", "Amplitud"))
         self.checkRespuesta.setText(_translate("MainWindow", "Respuesta"))
         self.radioButtonF.setText(_translate("MainWindow", "Frecuencia [Hz]"))
-        self.radioButton.setText(_translate("MainWindow", "Frecuencia angular [rad/s]"))
+        self.radioButtonW.setText(_translate("MainWindow", "Frecuencia angular [rad/s]"))
         __sortingEnabled = self.listWidget.isSortingEnabled()
         self.listWidget.setSortingEnabled(False)
         item = self.listWidget.item(0)
@@ -409,6 +414,7 @@ class PlotTool_MainWindow(object):
         self.btnMedicion.setText(_translate("MainWindow", "MEDICIÓN"))
         self.btnRespuesta.setText(_translate("MainWindow", "RESPUESTA"))
         self.btnBorrar.setText(_translate("MainWindow", "BORRAR GRÁFICOS"))
+
 
 if __name__ == "__main__":
     import sys
