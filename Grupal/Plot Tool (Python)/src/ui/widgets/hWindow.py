@@ -9,6 +9,7 @@
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
+from PlotWidget import PlotWidget
 
 
 class Ui_Dialog(object):
@@ -75,7 +76,6 @@ class Ui_Dialog(object):
         self.denominadorL.setText(_translate("Dialog", "Denominador:"))
         self.denominadorT.setPlaceholderText(_translate("Dialog", "Ingrese los coeficientes separados por comas"))
         self.okBtn.setText(_translate("Dialog", "OK"))
-from plotwidget import PlotWidget
 
 
 if __name__ == "__main__":
