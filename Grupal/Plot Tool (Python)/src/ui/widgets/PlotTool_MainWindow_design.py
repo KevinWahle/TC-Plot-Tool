@@ -24,7 +24,7 @@ class PlotTool_MainWindow_design(object):
         self.centralwidget.setMinimumSize(QtCore.QSize(0, 750))
         self.centralwidget.setObjectName("centralwidget")
         self.verticalLayout_3 = QtWidgets.QVBoxLayout(self.centralwidget)
-        self.verticalLayout_3.setContentsMargins(-1, 2, -1, 10)
+        self.verticalLayout_3.setContentsMargins(-1, 6, -1, 10)
         self.verticalLayout_3.setSpacing(0)
         self.verticalLayout_3.setObjectName("verticalLayout_3")
         self.verticalLayout_2 = QtWidgets.QVBoxLayout()
@@ -70,15 +70,6 @@ class PlotTool_MainWindow_design(object):
         self.horizontalLayout_13.setContentsMargins(-1, 0, -1, 0)
         self.horizontalLayout_13.setSpacing(0)
         self.horizontalLayout_13.setObjectName("horizontalLayout_13")
-        self.checkFase = QtWidgets.QCheckBox(self.horizontalWidget_10)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Fixed)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.checkFase.sizePolicy().hasHeightForWidth())
-        self.checkFase.setSizePolicy(sizePolicy)
-        self.checkFase.setChecked(True)
-        self.checkFase.setObjectName("checkFase")
-        self.horizontalLayout_13.addWidget(self.checkFase)
         self.checkAmplitud = QtWidgets.QCheckBox(self.horizontalWidget_10)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Fixed)
         sizePolicy.setHorizontalStretch(0)
@@ -88,6 +79,15 @@ class PlotTool_MainWindow_design(object):
         self.checkAmplitud.setChecked(True)
         self.checkAmplitud.setObjectName("checkAmplitud")
         self.horizontalLayout_13.addWidget(self.checkAmplitud)
+        self.checkFase = QtWidgets.QCheckBox(self.horizontalWidget_10)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Fixed)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.checkFase.sizePolicy().hasHeightForWidth())
+        self.checkFase.setSizePolicy(sizePolicy)
+        self.checkFase.setChecked(True)
+        self.checkFase.setObjectName("checkFase")
+        self.horizontalLayout_13.addWidget(self.checkFase)
         self.checkRespuesta = QtWidgets.QCheckBox(self.horizontalWidget_10)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Fixed)
         sizePolicy.setHorizontalStretch(0)
@@ -203,60 +203,32 @@ class PlotTool_MainWindow_design(object):
         self.verticalLayout_5.addLayout(self.horizontalLayout_2)
         self.horizontalLayout_8 = QtWidgets.QHBoxLayout()
         self.horizontalLayout_8.setObjectName("horizontalLayout_8")
-        self.btnSpice = QtWidgets.QPushButton(self.verticalWidget_3)
+        self.btnFiles = QtWidgets.QPushButton(self.verticalWidget_3)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.btnSpice.sizePolicy().hasHeightForWidth())
-        self.btnSpice.setSizePolicy(sizePolicy)
+        sizePolicy.setHeightForWidth(self.btnFiles.sizePolicy().hasHeightForWidth())
+        self.btnFiles.setSizePolicy(sizePolicy)
         font = QtGui.QFont()
         font.setPointSize(1)
         font.setBold(False)
         font.setItalic(False)
         font.setWeight(50)
         font.setStrikeOut(False)
-        self.btnSpice.setFont(font)
-        self.btnSpice.setStyleSheet("background-color: rgb(14, 51, 90);\n"
+        self.btnFiles.setFont(font)
+        self.btnFiles.setStyleSheet("background-color: rgb(14, 51, 90);\n"
 "color: rgb(255, 255, 255);\n"
 "border-style:outset;\n"
 "border-width:2px;\n"
 "border-radius:10px;\n"
 "border-color:black;\n"
-"font: 30px;\n"
+"font: 25px;\n"
 "min-height: 100px;\n"
 "min-width:160px;\n"
 "max-width:160px;")
-        self.btnSpice.setObjectName("btnSpice")
-        self.horizontalLayout_8.addWidget(self.btnSpice)
+        self.btnFiles.setObjectName("btnFiles")
+        self.horizontalLayout_8.addWidget(self.btnFiles)
         self.verticalLayout_5.addLayout(self.horizontalLayout_8)
-        self.horizontalLayout_7 = QtWidgets.QHBoxLayout()
-        self.horizontalLayout_7.setObjectName("horizontalLayout_7")
-        self.btnMedicion = QtWidgets.QPushButton(self.verticalWidget_3)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.btnMedicion.sizePolicy().hasHeightForWidth())
-        self.btnMedicion.setSizePolicy(sizePolicy)
-        font = QtGui.QFont()
-        font.setPointSize(1)
-        font.setBold(False)
-        font.setItalic(False)
-        font.setWeight(50)
-        font.setStrikeOut(False)
-        self.btnMedicion.setFont(font)
-        self.btnMedicion.setStyleSheet("background-color: rgb(14, 51, 90);\n"
-"color: rgb(255, 255, 255);\n"
-"border-style:outset;\n"
-"border-width:2px;\n"
-"border-radius:10px;\n"
-"border-color:black;\n"
-"font: 20px;\n"
-"min-height: 100px;\n"
-"min-width:160px;\n"
-"max-width:160px;")
-        self.btnMedicion.setObjectName("btnMedicion")
-        self.horizontalLayout_7.addWidget(self.btnMedicion)
-        self.verticalLayout_5.addLayout(self.horizontalLayout_7)
         self.horizontalLayout_10 = QtWidgets.QHBoxLayout()
         self.horizontalLayout_10.setObjectName("horizontalLayout_10")
         self.btnRespuesta = QtWidgets.QPushButton(self.verticalWidget_3)
@@ -314,7 +286,7 @@ class PlotTool_MainWindow_design(object):
         self.btnBorrar.setObjectName("btnBorrar")
         self.horizontalLayout_6.addWidget(self.btnBorrar)
         self.verticalLayout_5.addLayout(self.horizontalLayout_6)
-        self.horizontalLayout_3.addWidget(self.verticalWidget_3)
+        self.horizontalLayout_3.addWidget(self.verticalWidget_3, 0, QtCore.Qt.AlignLeft)
         self.verticalLayout_4 = QtWidgets.QVBoxLayout()
         self.verticalLayout_4.setSpacing(0)
         self.verticalLayout_4.setObjectName("verticalLayout_4")
@@ -390,11 +362,11 @@ class PlotTool_MainWindow_design(object):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "Plot Tool"))
         self.tituloT.setText(_translate("MainWindow", "PLOT TOOL - GRUPO 2 - 2021"))
+        self.checkAmplitud.setText(_translate("MainWindow", "Módulo"))
         self.checkFase.setText(_translate("MainWindow", "Fase"))
-        self.checkAmplitud.setText(_translate("MainWindow", "Amplitud"))
         self.checkRespuesta.setText(_translate("MainWindow", "Respuesta"))
         self.radioButtonF.setText(_translate("MainWindow", "Frecuencia [Hz]"))
-        self.radioButtonW.setText(_translate("MainWindow", "Frecuencia angular [rad/s]"))
+        self.radioButtonW.setText(_translate("MainWindow", "Frecuencia Angular [rad/s]"))
         __sortingEnabled = self.listWidget.isSortingEnabled()
         self.listWidget.setSortingEnabled(False)
         item = self.listWidget.item(0)
@@ -403,8 +375,8 @@ class PlotTool_MainWindow_design(object):
         item.setText(_translate("MainWindow", "Elemento 2"))
         self.listWidget.setSortingEnabled(__sortingEnabled)
         self.btnH.setText(_translate("MainWindow", "H ($)"))
-        self.btnSpice.setText(_translate("MainWindow", "SPICE"))
-        self.btnMedicion.setText(_translate("MainWindow", "MEDICIÓN"))
+        self.btnFiles.setText(_translate("MainWindow", "SPICE/\n"
+"MEDICIONES"))
         self.btnRespuesta.setText(_translate("MainWindow", "RESPUESTA"))
         self.btnBorrar.setText(_translate("MainWindow", "BORRAR GRÁFICOS"))
 

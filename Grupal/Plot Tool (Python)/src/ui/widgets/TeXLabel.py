@@ -1,5 +1,4 @@
 
-from PyQt5 import QtCore
 from PyQt5.QtWidgets import QApplication, QHBoxLayout, QLabel, QLineEdit, QWidget
 from matplotlib.figure import Figure
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg
@@ -39,7 +38,7 @@ class TeXLabel(QWidget):
         # Assign Layout
         self.setLayout(label_layout)
 
-    def setText(self, text='', size=20):
+    def setText(self, text='', size=18):
 
         self.fig.suptitle(text,
                 x=0.5, y=0.5,   # Alineado en el centro

@@ -1,3 +1,4 @@
+from PyQt5 import QtCore
 from PyQt5.QtWidgets import QMainWindow
 from src.ui.widgets.PlotTool_MainWindow_design import PlotTool_MainWindow_design
 from src.ui.widgets.FromFile_Window import FromFile_Window
@@ -10,40 +11,39 @@ class PlotToolApp(QMainWindow, PlotTool_MainWindow_design):
         super().__init__(*args, **kwargs)
         self.setupUi(self)
 
-        
-        self.verticalWidget_6.setVisible(False)
+        self.verticalWidget_6.setVisible(False)     # Grafico de Respuesta
 
-        self.checkAmplitud.stateChanged.connect(lambda state: self.verticalWidget_7.setVisible(state))
-        self.checkFase.stateChanged.connect(lambda state: self.horizontalWidget_6.setVisible(state))
-        self.checkRespuesta.stateChanged.connect(lambda state: self.verticalWidget_6.setVisible(state))
+        self.checkAmplitud.stateChanged.connect(lambda state: self.verticalWidget_7.setVisible(state))  # Grafico de Modulo
+        self.checkFase.stateChanged.connect(lambda state: self.horizontalWidget_6.setVisible(state))    # Grafico de Fase
+        self.checkRespuesta.stateChanged.connect(lambda state: self.verticalWidget_6.setVisible(state)) # Grafico de Respuesta
+
+        self.listWidget.itemClicked.connect(self.listItemClicked)
 
         self.btnH.clicked.connect(self.openHWindow)
-        self.btnSpice.clicked.connect(self.openFileWindow)
+        self.btnFiles.clicked.connect(self.openFileWindow)
         self.btnRespuesta.clicked.connect(self.openRespWindow)
+
+    def listItemClicked(self, item):
+        item.setCheckState(QtCore.Qt.Checked if item.checkState() != QtCore.Qt.Checked else QtCore.Qt.Unchecked)
+        #TODO: Mostrar/Ocultar curvas
 
     def openFileWindow(self):
         # Abrimos la ventana de seleccion de archivo
         fileW = FromFile_Window()
         if(fileW.exec()):   # Vuelve sin error
             #TODO: Graficar
-            print("Se cerro SIN error")
-        else:
-            print("Se cerro CON error")
+            pass
 
     def openHWindow(self):
         # Abrimos la ventana de seleccion de archivo
         transFuncW = H_Window()
         if(transFuncW.exec()):   # Vuelve sin error
             #TODO: Graficar
-            print("Se cerro SIN error")
-        else:
-            print("Se cerro CON error")
+            pass
 
     def openRespWindow(self):
         # Abrimos la ventana de seleccion de archivo
         respW = Respuesta_Window()
         if(respW.exec()):   # Vuelve sin error
             #TODO: Graficar
-            print("Se cerro SIN error")
-        else:
-            print("Se cerro CON error")
+            pass

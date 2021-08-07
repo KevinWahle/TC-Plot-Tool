@@ -21,7 +21,8 @@ class H_Window(QtWidgets.QDialog, H_Window_design):
 
         self.setupUi(self)
 
-        regexVal = QtGui.QRegExpValidator(QtCore.QRegExp("(\d+,)+"))
+        # Expresion regular para tomar valores validos de numeros decimales separados por comas (punto separador decimal)
+        regexVal = QtGui.QRegExpValidator(QtCore.QRegExp("(\d+\.?\d*(e\d+)?\d*,)+"))
 
         self.numeradorT.setValidator(regexVal)
         self.denominadorT.setValidator(regexVal)
@@ -41,16 +42,18 @@ class H_Window(QtWidgets.QDialog, H_Window_design):
         den = self.denominadorT.text()
 
         if num and den:
-            
-            # Lo convierto en arreglo de floats, omitiendo las comas finales
-            numArr = [float(i) for i in list(filter(None, num.split(',')))]
-            denArr = [float(i) for i in list(filter(None, den.split(',')))]
+            try:
+                # Lo convierto en arreglo de floats, omitiendo las comas finales
+                numArr = [float(i) for i in list(filter(None, num.split(',')))]
+                denArr = [float(i) for i in list(filter(None, den.split(',')))]
 
-            num = self.arrToPol(numArr)
-            den = self.arrToPol(denArr)
+                num = self.arrToPol(numArr)
+                den = self.arrToPol(denArr)
 
 
-            self.widgetTransferencia.setText("$H(s) = \\frac{" + num + "}{" + den + "}$" )
+                self.widgetTransferencia.setText("$H(s) = \\frac{" + num + "}{" + den + "}$" )
+            except:
+                print("Entrada incorrecta")
         else:
             self.widgetTransferencia.setText("$H(s) =$")
 

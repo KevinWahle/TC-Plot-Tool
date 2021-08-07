@@ -12,11 +12,10 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 
 
 class FromFile_Window_design(object):
-
     def setupUi(self, Dialog):
         Dialog.setObjectName("Dialog")
-        Dialog.resize(406, 120)
-        Dialog.setMaximumSize(QtCore.QSize(16777215, 120))
+        Dialog.resize(409, 140)
+        Dialog.setMaximumSize(QtCore.QSize(16777215, 140))
         font = QtGui.QFont()
         font.setKerning(True)
         Dialog.setFont(font)
@@ -68,6 +67,22 @@ class FromFile_Window_design(object):
         self.pathT.setObjectName("pathT")
         self.horizontalLayout_2.addWidget(self.pathT)
         self.verticalLayout.addLayout(self.horizontalLayout_2)
+        self.horizontalLayout_3 = QtWidgets.QHBoxLayout()
+        self.horizontalLayout_3.setObjectName("horizontalLayout_3")
+        self.nombreL_2 = QtWidgets.QLabel(self.verticalWidget)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.nombreL_2.sizePolicy().hasHeightForWidth())
+        self.nombreL_2.setSizePolicy(sizePolicy)
+        self.nombreL_2.setObjectName("nombreL_2")
+        self.horizontalLayout_3.addWidget(self.nombreL_2)
+        self.comboBox = QtWidgets.QComboBox(self.verticalWidget)
+        self.comboBox.setObjectName("comboBox")
+        self.comboBox.addItem("")
+        self.comboBox.addItem("")
+        self.horizontalLayout_3.addWidget(self.comboBox)
+        self.verticalLayout.addLayout(self.horizontalLayout_3)
         self.okBtn = QtWidgets.QPushButton(self.verticalWidget)
         self.okBtn.setMinimumSize(QtCore.QSize(60, 30))
         self.okBtn.setMaximumSize(QtCore.QSize(60, 30))
@@ -83,16 +98,18 @@ class FromFile_Window_design(object):
         self.verticalLayout_2.addWidget(self.verticalWidget)
 
         self.retranslateUi(Dialog)
-
         QtCore.QMetaObject.connectSlotsByName(Dialog)
 
     def retranslateUi(self, Dialog):
         _translate = QtCore.QCoreApplication.translate
-        Dialog.setWindowTitle(_translate("Dialog", "Gestor"))
+        Dialog.setWindowTitle(_translate("Dialog", "LTSpice / Mediciones"))
         self.nombreL.setText(_translate("Dialog", "Nombre: "))
-        self.nombreT.setPlaceholderText(_translate("Dialog", "Ingrese el nombre de la curva"))
+        self.nombreT.setPlaceholderText(_translate("Dialog", "Ingrese el nombre de la curva o conjuntos de puntos"))
         self.archivoL.setText(_translate("Dialog", "Seleccione el archivo: "))
         self.pathT.setPlaceholderText(_translate("Dialog", "Ingrese el path"))
+        self.nombreL_2.setText(_translate("Dialog", "Tipo de datos:"))
+        self.comboBox.setItemText(0, _translate("Dialog", "Frecuencia | Módulo | Fase"))
+        self.comboBox.setItemText(1, _translate("Dialog", "Tiempo | Otro"))
         self.okBtn.setText(_translate("Dialog", "OK"))
 
 

@@ -97,7 +97,7 @@ class H_Window_design(object):
 
     def retranslateUi(self, Dialog):
         _translate = QtCore.QCoreApplication.translate
-        Dialog.setWindowTitle(_translate("Dialog", "Gestor"))
+        Dialog.setWindowTitle(_translate("Dialog", "Función Transferencia"))
         self.nombreL.setText(_translate("Dialog", "Nombre:        "))
         self.nombreT.setPlaceholderText(_translate("Dialog", "Ingrese el nombre de la curva"))
         self.numeradorL.setText(_translate("Dialog", "Numerador:   "))
