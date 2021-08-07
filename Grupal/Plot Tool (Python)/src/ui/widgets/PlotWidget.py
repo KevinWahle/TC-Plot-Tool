@@ -10,8 +10,8 @@ import scipy.signal as ss
 from matplotlib.figure import Figure
 from matplotlib.backends.backend_qt5agg import FigureCanvas, NavigationToolbar2QT
 
-# from src.ui.widgets.LabelEditWidget import LabelEditWidget
-from LabelEditWidget import LabelEditWidget
+from src.ui.widgets.LabelEditWidget import LabelEditWidget
+# from LabelEditWidget import LabelEditWidget
 
 class PlotWidget(QWidget):
     def __init__(self, parent=None):

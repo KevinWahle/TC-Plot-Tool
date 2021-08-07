@@ -9,110 +9,33 @@
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
-from TeXLabel import TeXLabel
+
+from src.ui.widgets.H_Window_design import H_Window_design
+# from H_Window_design import H_Window_design
 
 
-class H_Window(object):
-    def setupUi(self, Dialog):
-        Dialog.setObjectName("Dialog")
-        Dialog.setEnabled(True)
-        Dialog.resize(402, 312)
-        Dialog.setMinimumSize(QtCore.QSize(0, 312))
-        Dialog.setMaximumSize(QtCore.QSize(16777215, 350))
-        self.verticalLayout_2 = QtWidgets.QVBoxLayout(Dialog)
-        self.verticalLayout_2.setContentsMargins(-1, 11, -1, 5)
-        self.verticalLayout_2.setObjectName("verticalLayout_2")
-        self.verticalLayout = QtWidgets.QVBoxLayout()
-        self.verticalLayout.setObjectName("verticalLayout")
-        self.horizontalLayout_3 = QtWidgets.QHBoxLayout()
-        self.horizontalLayout_3.setObjectName("horizontalLayout_3")
-        self.nombreL = QtWidgets.QLabel(Dialog)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Fixed)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.nombreL.sizePolicy().hasHeightForWidth())
-        self.nombreL.setSizePolicy(sizePolicy)
-        self.nombreL.setObjectName("nombreL")
-        self.horizontalLayout_3.addWidget(self.nombreL)
-        self.nombreT = QtWidgets.QLineEdit(Dialog)
-        self.nombreT.setInputMask("")
-        self.nombreT.setObjectName("nombreT")
-        self.horizontalLayout_3.addWidget(self.nombreT)
-        self.verticalLayout.addLayout(self.horizontalLayout_3)
-        self.horizontalLayout_2 = QtWidgets.QHBoxLayout()
-        self.horizontalLayout_2.setObjectName("horizontalLayout_2")
-        self.numeradorL = QtWidgets.QLabel(Dialog)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Fixed)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.numeradorL.sizePolicy().hasHeightForWidth())
-        self.numeradorL.setSizePolicy(sizePolicy)
-        self.numeradorL.setObjectName("numeradorL")
-        self.horizontalLayout_2.addWidget(self.numeradorL)
-        self.numeradorT = QtWidgets.QLineEdit(Dialog)
-        self.numeradorT.setInputMask("")
-        self.numeradorT.setObjectName("numeradorT")
-        self.horizontalLayout_2.addWidget(self.numeradorT)
-        self.verticalLayout.addLayout(self.horizontalLayout_2)
-        self.horizontalLayout = QtWidgets.QHBoxLayout()
-        self.horizontalLayout.setObjectName("horizontalLayout")
-        self.denominadorL = QtWidgets.QLabel(Dialog)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Fixed)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.denominadorL.sizePolicy().hasHeightForWidth())
-        self.denominadorL.setSizePolicy(sizePolicy)
-        self.denominadorL.setObjectName("denominadorL")
-        self.horizontalLayout.addWidget(self.denominadorL)
-        self.denominadorT = QtWidgets.QLineEdit(Dialog)
-        self.denominadorT.setInputMask("")
+class H_Window(QtWidgets.QDialog, H_Window_design):
+
+    def __init__(self, *args, **kargs) -> None:
+        super().__init__(*args, **kargs)
+
+        self.setupUi(self)
 
         regexVal = QtGui.QRegExpValidator(QtCore.QRegExp("(\d+,)+"))
 
         self.numeradorT.setValidator(regexVal)
         self.denominadorT.setValidator(regexVal)
 
-        self.denominadorT.setObjectName("denominadorT")
-        self.horizontalLayout.addWidget(self.denominadorT)
-        self.verticalLayout.addLayout(self.horizontalLayout)
-        self.widgetTransferencia = TeXLabel(Dialog)
-        self.widgetTransferencia.setObjectName("widgetTransferencia")
-        self.verticalLayout.addWidget(self.widgetTransferencia)
-        self.okBtn = QtWidgets.QPushButton(Dialog)
-        self.okBtn.setMinimumSize(QtCore.QSize(60, 30))
-        self.okBtn.setMaximumSize(QtCore.QSize(60, 30))
-        self.okBtn.setStyleSheet("background-color: rgb(14, 51, 90);\n"
-"color: rgb(255, 255, 255);\n"
-"border-style:outset;\n"
-"border-width:2px;\n"
-"border-radius:10px;\n"
-"border-color:black;\n"
-"")
-        self.okBtn.setObjectName("okBtn")
-        self.verticalLayout.addWidget(self.okBtn, 0, QtCore.Qt.AlignHCenter|QtCore.Qt.AlignBottom)
-        self.verticalLayout_2.addLayout(self.verticalLayout)
-
-        self.retranslateUi(Dialog)
-
         self.numeradorT.textChanged.connect(self.updateTF)
         self.denominadorT.textChanged.connect(self.updateTF)
 
-        QtCore.QMetaObject.connectSlotsByName(Dialog)
-
-    def retranslateUi(self, Dialog):
-        _translate = QtCore.QCoreApplication.translate
-        Dialog.setWindowTitle(_translate("Dialog", "Gestor"))
-        self.nombreL.setText(_translate("Dialog", "Nombre:        "))
-        self.nombreT.setPlaceholderText(_translate("Dialog", "Ingrese el nombre de la curva"))
-        self.numeradorL.setText(_translate("Dialog", "Numerador:   "))
-        self.numeradorT.setPlaceholderText(_translate("Dialog", "Ingrese los coeficientes separados por comas"))
-        self.denominadorL.setText(_translate("Dialog", "Denominador:"))
-        self.denominadorT.setPlaceholderText(_translate("Dialog", "Ingrese los coeficientes separados por comas"))
-        self.okBtn.setText(_translate("Dialog", "OK"))
-
         self.widgetTransferencia.setText('$H(s) =$')
 
-    
+        self.okBtn.clicked.connect(self.okBtnClick)
+
+    def okBtnClick(self):
+        self.accept()
+
     def updateTF(self):
         num = self.numeradorT.text()
         den = self.denominadorT.text()
@@ -155,8 +78,6 @@ class H_Window(object):
 if __name__ == "__main__":
     import sys
     app = QtWidgets.QApplication(sys.argv)
-    Dialog = QtWidgets.QDialog()
     ui = H_Window()
-    ui.setupUi(Dialog)
-    Dialog.show()
+    ui.show()
     sys.exit(app.exec_())
