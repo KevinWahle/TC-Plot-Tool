@@ -22,7 +22,8 @@ class H_Window(QtWidgets.QDialog, H_Window_design):
         self.setupUi(self)
 
         # Expresion regular para tomar valores validos de numeros decimales separados por comas (punto separador decimal)
-        regexVal = QtGui.QRegExpValidator(QtCore.QRegExp("(\d+\.?\d*(e\d+)?\d*,)+"))
+        # regexVal = QtGui.QRegExpValidator(QtCore.QRegExp("(\d+\.?\d*(e\d+)?($|,(?!$)))+"))
+        regexVal = QtGui.QRegExpValidator(QtCore.QRegExp("((\+|-)?\d+\.?\d*(e\d+)?($|,(?!$)))+"))
 
         self.numeradorT.setValidator(regexVal)
         self.denominadorT.setValidator(regexVal)
@@ -31,15 +32,21 @@ class H_Window(QtWidgets.QDialog, H_Window_design):
         self.denominadorT.textChanged.connect(self.updateTF)
 
         self.widgetTransferencia.setText('$H(s) =$')
+        self.tfOk = False
 
         self.okBtn.clicked.connect(self.okBtnClick)
 
     def okBtnClick(self):
-        self.accept()
+        if self.nombreT.text() and self.numeradorT.hasAcceptableInput() and self.denominadorT.hasAcceptableInput() and self.tfOk:
+            self.accept()
+        else:
+            print("La entrada no es válida")
 
     def updateTF(self):
         num = self.numeradorT.text()
         den = self.denominadorT.text()
+
+        print(self.numeradorT.hasAcceptableInput(), self.denominadorT.hasAcceptableInput())
 
         if num and den:
             try:
@@ -52,30 +59,29 @@ class H_Window(QtWidgets.QDialog, H_Window_design):
 
 
                 self.widgetTransferencia.setText("$H(s) = \\frac{" + num + "}{" + den + "}$" )
+                self.tfOk = True
             except:
+                self.tfOk = False
                 print("Entrada incorrecta")
         else:
             self.widgetTransferencia.setText("$H(s) =$")
 
-    
-    def arrToPol(self, arr=[]):
+    # Convierte un arreglo de numeros en un polinomio de s
+    def arrToPol(self, arr = [], var = 's'):
         pol = ''
         for i in range(len(arr)):
             q = len(arr)-i-1
             if arr[i] != 0:
-
-                if i>0 and arr[i-1] > 0:
+                if pol and arr[i] > 0:  # No es el primer elemento y es positivo
                     pol += ' + '
 
                 pol += "{:.2f}".format(arr[i])
                 if  q > 1:
-                    pol += 's^' + str(q)
+                    pol += var + '^{' + str(q) + '}'
                 elif q==1:
-                    pol += 's'
-            elif i > 0 and i < len(arr)-1 and arr[i+1] > 0:
-                pol += ' + '
+                    pol += var
 
-        return pol 
+        return pol if pol else '0'
 
 
 if __name__ == "__main__":
