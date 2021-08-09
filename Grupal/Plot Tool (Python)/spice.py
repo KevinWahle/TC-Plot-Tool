@@ -1,4 +1,5 @@
 # La respuesta es a todas las curvas
+# Probar ingreso de datos
 
 import numpy as np
 import pandas as pd
@@ -137,14 +138,16 @@ def simBode(H, signal):
 
     return signal
 
-def getDataTeorica(H):
-
+def getDataTeorica(Hnum, Hden):
     # Calculamos el Bode y lo appendeamos al dict
     signal={"frec":[], "amp":[], "phase":[], "time":[], "y":[]}
+    H = getTransfFunct(Hnum, Hden)
     signal = simBode(H, signal) 
 
     return signal
 
+
+#No se usa
 def calcRta(H, exitacion, w=0, A=0, duty=0.5):
     
     if exitacion == 0:                      # escalon
@@ -174,7 +177,7 @@ def calcRta(H, exitacion, w=0, A=0, duty=0.5):
 
 #Tests
 
-my_data=getDataFile("inputExamples\Ejemplo1-simulacion.txt", 0)
+my_data=getDataFromFile("inputExamples\Ejemplo1-simulacion.txt", 0)
 #my_data=getDataTeorica("1,1,0","1,1,1")
 
 #print(my_data)
