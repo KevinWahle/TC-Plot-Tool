@@ -22,7 +22,7 @@ class H_Window(QtWidgets.QDialog, H_Window_design):
         self.setupUi(self)
 
         # Expresion regular para tomar valores validos de numeros decimales separados por comas (punto separador decimal)
-        # regexVal = QtGui.QRegExpValidator(QtCore.QRegExp("(\d+\.?\d*(e\d+)?($|,(?!$)))+"))
+        # Se usa para validar que la entrada sea valida, por eso no puede terminar con ',' o con un numero incompleto ni vacio
         regexVal = QtGui.QRegExpValidator(QtCore.QRegExp("((\+|-)?\d+\.?\d*(e\d+)?($|,(?!$)))+"))
 
         self.numeradorT.setValidator(regexVal)
@@ -36,8 +36,15 @@ class H_Window(QtWidgets.QDialog, H_Window_design):
 
         self.okBtn.clicked.connect(self.okBtnClick)
 
+        # Valores de retorno
+        self.name = ''      # Nombre de la curva
+        self.numArr = []    # Arreglo de coeficientes del numerador
+        self.denArr = []    # Arreglo de coeficientes del denominador
+
+
     def okBtnClick(self):
-        if self.nombreT.text() and self.numeradorT.hasAcceptableInput() and self.denominadorT.hasAcceptableInput() and self.tfOk:
+        self.name = self.nombreT.text()
+        if self.name and self.numeradorT.hasAcceptableInput() and self.denominadorT.hasAcceptableInput() and self.tfOk:
             self.accept()
         else:
             print("La entrada no es válida")
@@ -46,16 +53,14 @@ class H_Window(QtWidgets.QDialog, H_Window_design):
         num = self.numeradorT.text()
         den = self.denominadorT.text()
 
-        print(self.numeradorT.hasAcceptableInput(), self.denominadorT.hasAcceptableInput())
-
         if num and den:
             try:
-                # Lo convierto en arreglo de floats, omitiendo las comas finales
-                numArr = [float(i) for i in list(filter(None, num.split(',')))]
-                denArr = [float(i) for i in list(filter(None, den.split(',')))]
+                # Lo convierto en arreglo de floats, omitiendo si hay numeros incompletos
+                self.numArr = [float(i) for i in list(filter(None, num.split(',')))]
+                self.denArr = [float(i) for i in list(filter(None, den.split(',')))]
 
-                num = self.arrToPol(numArr)
-                den = self.arrToPol(denArr)
+                num = self.arrToPol(self.numArr)
+                den = self.arrToPol(self.denArr)
 
 
                 self.widgetTransferencia.setText("$H(s) = \\frac{" + num + "}{" + den + "}$" )

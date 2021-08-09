@@ -11,7 +11,7 @@
 from PyQt5 import QtWidgets
 
 from src.ui.widgets.FromFile_Window_design import FromFile_Window_design
-# from FromFile_Window_ui import FromFile_Window_ui
+# from FromFile_Window_design import FromFile_Window_design
 
 
 class FromFile_Window(QtWidgets.QDialog, FromFile_Window_design):
@@ -22,6 +22,11 @@ class FromFile_Window(QtWidgets.QDialog, FromFile_Window_design):
 
         self.pathBtn.clicked.connect(self.selectFile)
         self.okBtn.clicked.connect(self.okBtnClick)
+
+        # Valores de retorno
+        self.name = ''              # Nombre de la curva
+        self.path = ''              # Path del archivo
+        self.type = self.comboBox.currentIndex()    # Opcion seleccionada (fercuencia o tiempo)
 
     def selectFile( self ):
         ''' Called when the user presses the Browse button
@@ -37,7 +42,10 @@ class FromFile_Window(QtWidgets.QDialog, FromFile_Window_design):
 
     def okBtnClick(self):
         # Si los campos no estan vacios, se vuelve sin error
-        if (self.nombreT.text() and self.pathT.text()):
+        self.name = self.nombreT.text()
+        self.path = self.pathT.text()
+        if (self.name and self.path):
+            self.type = self.comboBox.currentIndex()
             self.accept()
 
 
