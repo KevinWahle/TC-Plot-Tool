@@ -153,9 +153,9 @@ def calcRta(H, exitacion, w=0, A=0, duty=0.5):
     elif exitacion == 1:                    # senoidal
         tMax= 5 * (2*np.pi/w)   
         tin = np.linspace(0, tMax, 50000, endpoint=False)
-        seno = A*(np.sin(w*t))
+        seno = A*(np.sin(w*tin))
         
-        t, y,  = ss.lsim((H.num, H.den), U=seno, T=t)  # Calculamos la Rta
+        t, y,  = ss.lsim((H.num, H.den), U=seno, T=tin)  # Calculamos la Rta
     
     elif exitacion == 2:                    # impulso
         t, y = ss.impulse((H.num, H.den))   #https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.impulse.html#scipy.signal.impulse
@@ -163,8 +163,8 @@ def calcRta(H, exitacion, w=0, A=0, duty=0.5):
     elif exitacion == 3:                    # pulso
         tMax= 5 * (2*np.pi/w)   
         tin = np.linspace(0, tMax, 50000, endpoint=False)
-        cuadrada = ss.square(5*(2*np.pi)*tin, duty)
-        t, y,  = ss.lsim((H.num, H.den), U=cuadrada, T=t)  # Calculamos la Rta
+        cuadrada = ss.square(5*(2*np.pi)*tin, duty)     #https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.square.html#scipy.signal.square
+        t, y,  = ss.lsim((H.num, H.den), U=cuadrada, T=tin)  # Calculamos la Rta
 
     #else:
     # Cargar archivo de exitación. 

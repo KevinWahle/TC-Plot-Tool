@@ -50,7 +50,7 @@ class PlotToolApp(QMainWindow, PlotTool_MainWindow_design):
         respW = Respuesta_Window()
         if(respW.exec()):   # Vuelve sin error
             #TODO: Graficar
-            print(respW.name, respW.type, respW.amp, respW.freq, respW.freqType)
+            # print(respW.name, respW.type, respW.amp, respW.freq, respW.freqType)
             pass
 
     def clearFigs(self):
