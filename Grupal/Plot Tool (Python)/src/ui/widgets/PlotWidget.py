@@ -6,7 +6,6 @@ from PyQt5.QtWidgets import QApplication, QWidget, QVBoxLayout
 
 import numpy as np
 import scipy.signal as ss
-import matplotlib.pyplot as plt
 
 from matplotlib.figure import Figure
 from matplotlib.backends.backend_qt5agg import FigureCanvas, NavigationToolbar2QT
@@ -48,8 +47,8 @@ class PlotWidget(QWidget):
 
 
     # Para dibujar directamente
-    def plot(self, *args, **kargs):
-        self.axes.plot(args, *args, **kargs)
+    def draw(self):
+        self.canvas.draw()
 
     # Borra los ejes
     def clear(self):

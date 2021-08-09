@@ -1,6 +1,8 @@
 from PyQt5 import QtCore
 from PyQt5.QtWidgets import QMainWindow
+from Curve import Curve
 from src.ui.widgets.PlotTool_MainWindow_design import PlotTool_MainWindow_design
+# from src.ui.widgets.PlotTool_MainWindow_design import PlotTool_MainWindow_design
 from src.ui.widgets.FromFile_Window import FromFile_Window
 from src.ui.widgets.H_Window import H_Window
 from src.ui.widgets.Respuesta_Window import Respuesta_Window
@@ -25,6 +27,9 @@ class PlotToolApp(QMainWindow, PlotTool_MainWindow_design):
         self.btnRespuesta.clicked.connect(self.openRespWindow)
         self.btnBorrar.clicked.connect(self.clearFigs)
 
+        self.curves = []
+        self.excits = []
+
     def listItemClicked(self, item):
         item.setCheckState(QtCore.Qt.Checked if item.checkState() != QtCore.Qt.Checked else QtCore.Qt.Unchecked)
         #TODO: Mostrar/Ocultar curvas
@@ -35,7 +40,8 @@ class PlotToolApp(QMainWindow, PlotTool_MainWindow_design):
         if(transFuncW.exec()):   # Vuelve sin error
             #TODO: Graficar
             # print(transFuncW.name, transFuncW.numArr, transFuncW.denArr)
-            pass
+            Hcurve = Curve(nombre=transFuncW.name, Hnum=transFuncW.numArr, Hden=transFuncW.denArr)
+            self.curves.append(Hcurve)
 
     def openFileWindow(self):
         # Abrimos la ventana de seleccion de archivo
