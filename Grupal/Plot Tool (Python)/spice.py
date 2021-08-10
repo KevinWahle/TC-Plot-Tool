@@ -66,7 +66,6 @@ def getDataFromMonteCarlo(rawData, modo):
             
             else:
                 fin = index                                 # Determinamos el último punto a medir
-                print(rawData[index])
                 # Transformo los renglones en una curva y la appendeo a signal (arreglo de curvas) 
                 signal = appendCurve(signal, Data2Dict(rawData[init:fin], modo), modo)    
                 init = index+1                              # Movemos el Inicio al primer dato de la prox Run
@@ -90,6 +89,7 @@ def getDataSimulation(path, modo):
 
 def getDataMediciones(path, modo):
     data = (pd.read_csv(path)).to_numpy()       # Pasamos de .csv a matriz 
+    signal={"frec":[], "amp":[], "phase":[], "time":[], "y":[]}
     aux={"frec":[], "amp":[], "phase":[], "time":[], "y":[]}  # Diccionario aux para manipular los datos.
 
     filas= (data.shape)[0]
@@ -103,7 +103,7 @@ def getDataMediciones(path, modo):
             aux["time"].append(data[index][0])      # Para cada columna, appendeo TODOS los datos de cada una 
             aux["y"].append(data[index][1])         # de sus filas en un arreglo distinto. 
 
-    return appendCurve(aux, modo)
+    return appendCurve(signal, aux, modo)
 
 def getDataFromFile(path, modo):
     if ".txt" in path:
@@ -140,10 +140,9 @@ def simBode(H, signal):
 
     return signal
 
-def getDataTeorica(Hnum, Hden):
+def getDataTeorica(H):
     # Calculamos el Bode y lo appendeamos al dict
     signal={"frec":[], "amp":[], "phase":[], "time":[], "y":[]}
-    H = getTransfFunct(Hnum, Hden)
     signal = simBode(H, signal) 
 
     return signal

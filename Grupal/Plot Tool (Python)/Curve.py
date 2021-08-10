@@ -30,7 +30,7 @@ class Curve:
 
         if exitacion.type == 0:                      # escalon
             t, y = ss.step((self.H.num, self.H.den))        #https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.step.html#scipy.signal.step
-            y = y * exitacion.A
+            y = y * exitacion.amp
         elif exitacion.type == 1:                    # senoidal
             tin,seno =exitacion.getValues()
             t, y,  = ss.lsim((self.H.num, self.H.den), U=seno, T=tin)  # Calculamos la Rta
@@ -52,23 +52,31 @@ class Curve:
 
         if self.visibility == True:
             for index in range(len(self.data["frec"])):  # Grafico de Bodes
-                axes[0].plot(self.data["frec"][index], self.data["amp"][index], 
+                if index == 0:
+                    axes[0].plot(self.data["frec"][index], self.data["amp"][index], 
                             color='C'+str(cIndex), linestyle = self.trazo, label= self.nombre)
-                axes[1].plot(self.data["frec"][index], self.data["phase"][index], 
+                    axes[1].plot(self.data["frec"][index], self.data["phase"][index], 
                             color='C'+str(cIndex), linestyle = self.trazo, label= self.nombre)
+                else:
+                    axes[0].plot(self.data["frec"][index], self.data["amp"][index], 
+                            color='C'+str(cIndex), linestyle = self.trazo)
+                    axes[1].plot(self.data["frec"][index], self.data["phase"][index], 
+                            color='C'+str(cIndex), linestyle = self.trazo)
         
             for index in range(len(self.data["time"])):  # Grafico de Rtas
-                axes[2].plot(self.data["time"][index], self.data["y"][index], 
-                        color='C'+str(cIndex), linestyle = self.trazo, label= self.nombre)
+                if index == 0:
+                    axes[2].plot(self.data["time"][index], self.data["y"][index], 
+                            color='C'+str(cIndex), linestyle = self.trazo, label= self.nombre)
+                else:
+                    axes[2].plot(self.data["time"][index], self.data["y"][index], 
+                        color='C'+str(cIndex), linestyle = self.trazo)
 
     def setVisibility(self, state):
         self.visibility = state
 
 def graphCurves(curves=[], axes=[], exitaciones = []):
     
-    #exitVisibles = [exitacion for exitacion in exitaciones if exitacion.visibility==1]
-
-    for i in range(curves):
+    for i in range(len(curves)):
         curves[i].data["time"].clear()  # Limpiamos las Respuestas
         curves[i].data["y"].clear()
 
