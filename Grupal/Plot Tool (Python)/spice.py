@@ -1,21 +1,21 @@
-# La respuesta es a todas las curvas
-# Probar ingreso de datos
+# Vale la pena guardar el tiempo?
+
 
 import numpy as np
 import pandas as pd
 import scipy.signal as ss
 
-def appendCurve(aux, modo):
-    signal={"frec":[], "amp":[], "phase":[], "time":[], "y":[]}
+def appendCurve(toAppend, appended, modo):
+
     if modo == 0:
-        signal["frec"].append(aux["frec"])          # Apendeamos la frec de la run a la frec del dict de la señal
-        signal["amp"].append(aux["amp"])            # Apendeamos la Amp de la run a la Amp del dict de la señal
-        signal["phase"].append(aux["phase"])        # Apendeamos la fase de la run a la fase del dict de la señal
+        toAppend["frec"].append(appended["frec"])          # Apendeamos la frec de la run a la frec del dict de la señal
+        toAppend["amp"].append(appended["amp"])            # Apendeamos la Amp de la run a la Amp del dict de la señal
+        toAppend["phase"].append(appended["phase"])        # Apendeamos la fase de la run a la fase del dict de la señal
     elif modo == 1:
-        signal["time"].append(aux["time"])          # Apendeamos el time de la run al time del dict de la señal
-        signal["y"].append(aux["y"])                # Apendeamos la y de la run a la y del dict de la señal
+        toAppend["time"].append(appended["time"])          # Apendeamos el time de la run al time del dict de la señal
+        toAppend["y"].append(appended["y"])                # Apendeamos la y de la run a la y del dict de la señal
     
-    return signal
+    return toAppend
 
 # Te pasa los datos de UNA curva (no montecarlo) a un dict de arreglos(NO matrices) de datos
 def Data2Dict(data, modo):
@@ -45,29 +45,30 @@ def Data2Dict(data, modo):
     return aux
 
 def getDataSpice(lines, modo):  
+    signal={"frec":[], "amp":[], "phase":[], "time":[], "y":[]}
     aux = {"frec":[], "amp":[], "phase":[], "time":[], "y":[]}      # Diccionario aux para manipular los datos
     aux = Data2Dict(lines, modo)      # Dictionario con los arreglos de datos
 
-    return appendCurve(aux, modo)
+    return appendCurve(signal, aux, modo)
 
 def getDataFromMonteCarlo(rawData, modo):
     # Inicializamos variables
-    #signal={"frec":[], "amp":[], "phase":[], "time":[], "y":[]}
+    signal={"frec":[], "amp":[], "phase":[], "time":[], "y":[]}
     init = -1
     fin = 0
     last=len(rawData)
 
     for index in range(last):
 
-        if ("Step" in rawData[index])  or (index == last and not ("Step" in rawData[index])):
+        if ("Step" in rawData[index])  or index == last-1:
             if init == -1:      # Caso encuentro el Step de la primera Run
                 init = index+1  # Seteo solamente el init
             
             else:
-                fin = index                             # Determinamos el último punto a medir
-
+                fin = index                                 # Determinamos el último punto a medir
+                print(rawData[index])
                 # Transformo los renglones en una curva y la appendeo a signal (arreglo de curvas) 
-                signal = appendCurve(Data2Dict(rawData[init:fin], modo), modo)    
+                signal = appendCurve(signal, Data2Dict(rawData[init:fin], modo), modo)    
                 init = index+1                              # Movemos el Inicio al primer dato de la prox Run
 
     return signal
@@ -78,9 +79,7 @@ def getDataSimulation(path, modo):
     #Headers
     headers= file.readline().split("\t")
     headers[len(headers)-1]=headers[len(headers)-1].replace("\n","")
-
-    #signal={"frec":[], "amp":[], "phase":[], "time":[], "y":[]}
-
+    
     data = file.readlines()
     if "Step" in data[0]:
         signal = getDataFromMonteCarlo(data, modo)
@@ -116,13 +115,16 @@ def getDataFromFile(path, modo):
 
 def getTransfFunct(numStr, denStr):
     # Pasa los coeficientes de array(String) a array(float)
+    numList=numStr.split(",")
+    denList=denStr.split(",")
+
     num=[]
-    for index in range(len(numStr)):
-        num.append(float(numStr[index]))
+    for index in range(len(numList)):
+        num.append(float(numList[index]))
 
     den=[]
-    for index in range(len(denStr)):
-        den.append(float(denStr[index]))
+    for index in range(len(denList)):
+        den.append(float(denList[index]))
 
     H = ss.TransferFunction(num,den)
 
@@ -177,7 +179,9 @@ def calcRta(H, exitacion, w=0, A=0, duty=0.5):
 
 #Tests
 
-my_data=getDataFromFile("inputExamples\Ejemplo1-simulacion.txt", 0)
+my_data=getDataFromFile("inputExamples\Basuli.txt", 0)  #Montecarlo
+#my_data=getDataFromFile("inputExamples\Ejemplo2-simulacion.txt", 0)  #No montecarlo
 #my_data=getDataTeorica("1,1,0","1,1,1")
 
-#print(my_data)
+#print(my_data["amp"][4])
+#print(len(my_data["frec"]))
