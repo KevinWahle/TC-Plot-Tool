@@ -44,7 +44,8 @@ class H_Window(QtWidgets.QDialog, H_Window_design):
 
     def okBtnClick(self):
         self.name = self.nombreT.text()
-        if self.name and self.numeradorT.hasAcceptableInput() and self.denominadorT.hasAcceptableInput() and self.tfOk:
+        if self.name and self.numeradorT.hasAcceptableInput() and self.denominadorT.hasAcceptableInput() and self.tfOk\
+        and any(x!=0 for x in self.denArr):
             self.accept()
         else:
             print("La entrada no es válida")
