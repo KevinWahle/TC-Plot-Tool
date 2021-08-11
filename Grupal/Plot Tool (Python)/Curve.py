@@ -28,19 +28,19 @@ class Curve:
 
     def calcRta(self, exitacion):
 
-        if exitacion.type == 0:                      # escalon
+        if exitacion.type == 1:                      # escalon
             t, y = ss.step((self.H.num, self.H.den))        #https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.step.html#scipy.signal.step
             y = y * exitacion.amp
-        elif exitacion.type == 1:                    # senoidal
+        elif exitacion.type == 0:                    # senoidal
             tin,seno =exitacion.getValues()
-            t, y,  = ss.lsim((self.H.num, self.H.den), U=seno, T=tin)  # Calculamos la Rta
+            t, y,_  = ss.lsim((self.H.num, self.H.den), U=seno, T=tin)  # Calculamos la Rta
         
-        elif exitacion.type == 2:                    # impulso
+        elif exitacion.type == 3:                    # impulso
             t, y = ss.impulse((self.H.num, self.H.den))     #https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.impulse.html#scipy.signal.impulse
 
-        elif exitacion.type == 3:                    # cuadrada
-            tin,cuadrada =exitacion.getValues()
-            t, y,  = ss.lsim((self.H.num, self.H.den), U=cuadrada, T=tin) # Calculamos la Rta
+        elif exitacion.type == 2:                    # cuadrada
+            tin,cuadrada = exitacion.getValues()
+            t, y,_ = ss.lsim((self.H.num, self.H.den), U=cuadrada, T=tin) # Calculamos la Rta
 
         #else:
         # Cargar archivo de exitación. 
@@ -86,6 +86,8 @@ def graphCurves(curves=[], axes=[], exitaciones = []):
 
         curves[i].graphCurve(axes, i)   # Graficamos la curva
     
-    for axis in axes:   # Para cada eje, ponemos leyendas y grillas
-        axis.legend()   
-        axis.grid()
+    if any(x.visibility==True for x in curves):
+        for axis in axes:   # Para cada eje, ponemos leyendas y grillas
+            axis.legend()   
+            axis.grid() 
+        # if any(x.visibility==True for x in curves):

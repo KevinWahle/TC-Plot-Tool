@@ -20,10 +20,11 @@ class Respuesta_Window(QtWidgets.QDialog, Respuesta_Window_design):
 
         self.setupUi(self)
 
-        # Validacion para admitir solo numeros decimales validos
-        regexVal = QtGui.QRegExpValidator(QtCore.QRegExp("(\+|-)?\d+\.?\d*(e(\+|-)?\d+)?"))
-
+        # Validacion para las entradas de texto
+        regexVal = QtGui.QRegExpValidator(QtCore.QRegExp("(\+|-)?\d+\.?\d*(e(\+|-)?\d+)?"))     # Cualquier numero real
         self.amplitudT.setValidator(regexVal)
+        
+        regexVal = QtGui.QRegExpValidator(QtCore.QRegExp("\d+\.?\d*(e(\+|-)?\d+)?"))    # Solo numeros positivos
         self.frecuenciaAngularT.setValidator(regexVal)
         self.dutyCycleT.setValidator(regexVal)
 
@@ -54,7 +55,7 @@ class Respuesta_Window(QtWidgets.QDialog, Respuesta_Window_design):
         if self.name and    \
         ((self.amplitudT.isVisible() and self.amplitudT.hasAcceptableInput()) or not self.amplitudT.isVisible()) and \
         ((self.frecuenciaAngularT.isVisible() and self.frecuenciaAngularT.hasAcceptableInput()) or not self.frecuenciaAngularT.isVisible()) \
-        and ((self.dutyCycleT.isVisible() and self.dutyCycleT.hasAcceptableInput()) or not self.dutyCycleT.isVisible()):
+        and ((self.dutyCycleT.isVisible() and self.dutyCycleT.hasAcceptableInput() and float(self.dutyCycleT.text()) <= 1.0) or not self.dutyCycleT.isVisible()):
             self.type = self.buttonGroup.checkedId()
             if self.amplitudT.isVisible():
                 self.amp = float(self.amplitudT.text())

@@ -9,8 +9,8 @@ class LabelEditWidget(QWidget):
         # Create widgets
         self.x_input = QLineEdit()
         self.y_input = QLineEdit()
-        self.x_input.setPlaceholderText("X label")
-        self.y_input.setPlaceholderText("Y label")
+        self.x_input.setPlaceholderText("Eje X")
+        self.y_input.setPlaceholderText("Eje Y")
 
         #  Create layout
         input_layout = QHBoxLayout()

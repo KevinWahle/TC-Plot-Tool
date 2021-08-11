@@ -1,13 +1,14 @@
 from Excitation import Excitation
 from PyQt5 import QtCore
 from PyQt5.QtWidgets import QListView, QListWidgetItem, QMainWindow
-from Curve import Curve
+from Curve import Curve, graphCurves
 from src.ui.widgets.PlotTool_MainWindow_design import PlotTool_MainWindow_design
 # from src.ui.widgets.PlotTool_MainWindow_design import PlotTool_MainWindow_design
 from src.ui.widgets.FromFile_Window import FromFile_Window
 from src.ui.widgets.H_Window import H_Window
 from src.ui.widgets.Respuesta_Window import Respuesta_Window
 
+from spice import *
 class PlotToolApp(QMainWindow, PlotTool_MainWindow_design):
     def __init__(self, *args, **kwargs):
         # Inicializacion
@@ -25,18 +26,20 @@ class PlotToolApp(QMainWindow, PlotTool_MainWindow_design):
         # self.listWidget2.setMovement(QListView.Free)
         # self.listWidget2.setDefaultDropAction(QtCore.Qt.MoveAction)
 
+        # Toggle check al hacer doble click
         self.listWidget.itemDoubleClicked.connect(self.toggleItem)
         self.listWidget2.itemDoubleClicked.connect(self.toggleItem)
+        # Actualizar al cambiar nombre o visibilidad
         self.listWidget.itemChanged.connect(self.curveItemChanged)
+        self.listWidget2.itemChanged.connect(self.excitItemChanged)
 
-
-        self.delBtn1.clicked.connect(lambda: self.listWidget.removeItemWidget(self.listWidget.takeItem(self.listWidget.currentRow())))
-        self.delBtn2.clicked.connect(lambda: self.listWidget2.removeItemWidget(self.listWidget2.takeItem(self.listWidget2.currentRow())))
+        self.delBtn1.clicked.connect(self.removeCurrentCurve)
+        self.delBtn2.clicked.connect(self.removeCurrentExcit)
 
         self.btnH.clicked.connect(self.openHWindow)
         self.btnFiles.clicked.connect(self.openFileWindow)
         self.btnRespuesta.clicked.connect(self.openRespWindow)
-        self.btnBorrar.clicked.connect(self.clearFigs)
+        self.btnBorrar.clicked.connect(self.clearAll)
 
         # Ecitation and Curve arrays
         self.curves = []
@@ -44,7 +47,6 @@ class PlotToolApp(QMainWindow, PlotTool_MainWindow_design):
 
     def toggleItem(self, item):
         item.setCheckState(QtCore.Qt.Checked if item.checkState() != QtCore.Qt.Checked else QtCore.Qt.Unchecked)
-        #TODO: Mostrar/Ocultar/Actualizar curvas
 
     def curveItemChanged(self, item):
         index = self.listWidget.row(item)
@@ -53,6 +55,15 @@ class PlotToolApp(QMainWindow, PlotTool_MainWindow_design):
         self.curves[index].nombre = item.text()
         self.curves[index].visibility = item.checkState() == QtCore.Qt.Checked
         # TODO: updateCurves()
+        self.updateGraphs()
+
+    def excitItemChanged(self, item):
+        index = self.listWidget2.row(item)
+        
+        # Cambio el nombre o la visibilidad, actualizo las curvas
+        self.excits[index].name = item.text()
+        self.excits[index].visibility = item.checkState() == QtCore.Qt.Checked
+        self.updateGraphs()
 
     # def updateCurvesList(self):
     #     # Update curves list
@@ -74,7 +85,23 @@ class PlotToolApp(QMainWindow, PlotTool_MainWindow_design):
         self.listWidget.addItem(item)
 
         # Redraw curves
-        #TODO: drawCurves()
+        self.updateGraphs()
+
+    def updateGraphs(self):
+        self.widgetModulo.clear()
+        self.widgetFase.clear()
+        self.widgetRespuesta.clear()
+
+        self.widgetModulo.axes.set_xscale('log') 
+        self.widgetFase.axes.set_xscale('log') 
+
+        axes = [self.widgetModulo.axes, self.widgetFase.axes, self.widgetRespuesta.axes]
+        graphCurves(curves=self.curves, axes=axes, exitaciones = self.excits)
+
+        self.widgetModulo.draw()
+        self.widgetFase.draw()
+        self.widgetRespuesta.draw()
+        
 
     def addExcitation(self, excit):
         # Add to Excitaction array
@@ -87,7 +114,7 @@ class PlotToolApp(QMainWindow, PlotTool_MainWindow_design):
         self.listWidget2.addItem(item)
 
         # Redraw response
-        #TODO: drawCurves() / drawResp()
+        self.updateGraphs()
         
 
     def openHWindow(self):
@@ -114,8 +141,25 @@ class PlotToolApp(QMainWindow, PlotTool_MainWindow_design):
             excit = Excitation(name=respW.name, type=respW.type, amp=respW.amp, freq=respW.freq,    \
                                 freqType=respW.freqType, duty=respW.duty)
             self.addExcitation(excit)
-            # print(excit)
 
+    def removeCurrentCurve(self):
+        index = self.listWidget.currentRow()
+        if index > 0:
+            self.listWidget.removeItemWidget(self.listWidget.takeItem(index))
+            self.curves.pop(index)
+            self.updateGraphs()
+
+    def removeCurrentExcit(self):
+        index = self.listWidget2.currentRow()
+        if index > 0:
+            self.listWidget2.removeItemWidget(self.listWidget2.takeItem(index))
+            self.excits.pop(index)
+            self.updateGraphs()
+
+    def clearAll(self):
+        self.curves = []
+        self.excits = []
+        self.clearFigs()
 
     def clearFigs(self):
         self.listWidget.clear()

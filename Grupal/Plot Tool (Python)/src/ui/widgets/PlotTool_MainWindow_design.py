@@ -413,7 +413,7 @@ class PlotTool_MainWindow_design(object):
         self.checkRespuesta.setText(_translate("MainWindow", "Respuesta"))
         self.radioButtonF.setText(_translate("MainWindow", "Frecuencia [Hz]"))
         self.radioButtonW.setText(_translate("MainWindow", "Frecuencia Angular [rad/s]"))
-        self.btnH.setText(_translate("MainWindow", "H ($)"))
+        self.btnH.setText(_translate("MainWindow", "H (s)"))
         self.btnFiles.setText(_translate("MainWindow", "SPICE/\n"
 "MEDICIONES"))
         self.btnRespuesta.setText(_translate("MainWindow", "RESPUESTA"))

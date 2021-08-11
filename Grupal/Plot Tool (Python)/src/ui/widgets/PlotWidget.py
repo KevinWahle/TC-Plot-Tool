@@ -4,9 +4,6 @@
 import sys
 from PyQt5.QtWidgets import QApplication, QWidget, QVBoxLayout
 
-import numpy as np
-import scipy.signal as ss
-
 from matplotlib.figure import Figure
 from matplotlib.backends.backend_qt5agg import FigureCanvas, NavigationToolbar2QT
 
@@ -49,6 +46,7 @@ class PlotWidget(QWidget):
     # Para dibujar directamente
     def draw(self):
         self.canvas.draw()
+        self.canvas.figure.tight_layout()
 
     # Borra los ejes
     def clear(self):
@@ -58,29 +56,29 @@ class PlotWidget(QWidget):
         self.canvas.draw()
         self.canvas.figure.tight_layout()
 
-    def drawModule(self, H, *args, freq='rad', **kargs):
-        try:
+    # def drawModule(self, H, *args, freq='rad', **kargs):
+    #     try:
 
-            eje, modulo, fase = ss.bode(H)      # Calculo del Bode (La fase no se usa)
+    #         eje, modulo, fase = ss.bode(H)      # Calculo del Bode (La fase no se usa)
 
-            # Frecuencia en Hertz
-            if freq.lower() == 'hertz' or freq.lower() == 'h':
-                eje = eje / (2*np.pi)
+    #         # Frecuencia en Hertz
+    #         if freq.lower() == 'hertz' or freq.lower() == 'h':
+    #             eje = eje / (2*np.pi)
 
-            # Pasamos a escala logaritmica 
-            self.axes.set_xscale('log')
+    #         # Pasamos a escala logaritmica 
+    #         self.axes.set_xscale('log')
             
-            # Agregamos la cuadricula
-            self.axes.grid(True)
+    #         # Agregamos la cuadricula
+    #         self.axes.grid(True)
 
-            # Graficamos
-            self.axes.plot(eje, modulo, *args, **kargs)
+    #         # Graficamos
+    #         self.axes.plot(eje, modulo, *args, **kargs)
     
-            self.canvas.figure.tight_layout()
-            self.canvas.draw()
+    #         self.canvas.figure.tight_layout()
+    #         self.canvas.draw()
 
-        except:
-            print('Error al graficar')
+    #     except:
+    #         print('Error al graficar')
 
     # Actualiza los valores de los ejes
     def _update_label(self):
@@ -91,13 +89,10 @@ class PlotWidget(QWidget):
             self.axes.set_xlabel(x_label)
             self.axes.set_ylabel(y_label)
     
-            self.canvas.figure.tight_layout()
-            self.canvas.draw()
+            self.draw()
         except:
-            print('Entrada inválida')
-
-        self.drawModule(ss.TransferFunction([1,0,1], [1,4,1]), linestyle='-', linewidth=2)
-
+            # print('Entrada inválida')
+            pass
 
 
 if __name__ == "__main__":
