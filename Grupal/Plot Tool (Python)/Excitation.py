@@ -36,3 +36,11 @@ class Excitation:
             tin = np.linspace(0, tMax, 50000, endpoint=False)
             cuadrada = self.amp*(ss.square(w*tin, self.duty)+1)/2   # Adaptacion de 0 a 1V con frecuencia deseada
             return tin, cuadrada
+
+    # For Debug
+    def __str__(self) -> str:
+        return f'''Name: {self.name}
+Type: {self.type}
+Amplitude: {self.amp}
+Freq: {self.freq}
+Duty: {self.duty}'''

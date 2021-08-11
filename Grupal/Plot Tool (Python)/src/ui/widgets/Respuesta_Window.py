@@ -21,10 +21,13 @@ class Respuesta_Window(QtWidgets.QDialog, Respuesta_Window_design):
         self.setupUi(self)
 
         # Validacion para admitir solo numeros decimales validos
-        regexVal = QtGui.QRegExpValidator(QtCore.QRegExp("(\+|-)?\d+\.?\d*(e\d+)?"))
+        regexVal = QtGui.QRegExpValidator(QtCore.QRegExp("(\+|-)?\d+\.?\d*(e(\+|-)?\d+)?"))
 
         self.amplitudT.setValidator(regexVal)
         self.frecuenciaAngularT.setValidator(regexVal)
+        self.dutyCycleT.setValidator(regexVal)
+
+        self.horizontalWidget_5.setVisible(False)  # Ocultamos los campos del duty
 
         self.okBtn.clicked.connect(self.okBtnClick)
 
@@ -39,6 +42,7 @@ class Respuesta_Window(QtWidgets.QDialog, Respuesta_Window_design):
         self.amp = 0
         self.freq = 0
         self.freqType = self.getFreqType()
+        self.duty = 1
 
     def getFreqType(self):
         return 'F' if self.radioButtonF.isChecked() else 'W'
@@ -49,12 +53,15 @@ class Respuesta_Window(QtWidgets.QDialog, Respuesta_Window_design):
         # Verifica que todos los campos visible esten validados
         if self.name and    \
         ((self.amplitudT.isVisible() and self.amplitudT.hasAcceptableInput()) or not self.amplitudT.isVisible()) and \
-        ((self.frecuenciaAngularT.isVisible() and self.frecuenciaAngularT.hasAcceptableInput()) or not self.frecuenciaAngularT.isVisible()):
+        ((self.frecuenciaAngularT.isVisible() and self.frecuenciaAngularT.hasAcceptableInput()) or not self.frecuenciaAngularT.isVisible()) \
+        and ((self.dutyCycleT.isVisible() and self.dutyCycleT.hasAcceptableInput()) or not self.dutyCycleT.isVisible()):
             self.type = self.buttonGroup.checkedId()
             if self.amplitudT.isVisible():
                 self.amp = float(self.amplitudT.text())
             if self.frecuenciaAngularT.isVisible():
                 self.freq = float(self.frecuenciaAngularT.text())
+            if self.dutyCycleT.isVisible():
+                self.duty = float(self.dutyCycleT.text())
             self.freqType = self.getFreqType()
             self.accept()
 

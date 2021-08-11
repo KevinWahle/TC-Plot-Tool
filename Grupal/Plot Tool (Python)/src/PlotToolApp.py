@@ -25,9 +25,13 @@ class PlotToolApp(QMainWindow, PlotTool_MainWindow_design):
         # self.listWidget2.setMovement(QListView.Free)
         # self.listWidget2.setDefaultDropAction(QtCore.Qt.MoveAction)
 
-        self.listWidget.itemClicked.connect(self.listItemClicked)
-        self.listWidget2.itemClicked.connect(self.listItemClicked)
-        # self.listWidget.itemChanged.connect(self.curveItemChanged)
+        self.listWidget.itemDoubleClicked.connect(self.toggleItem)
+        self.listWidget2.itemDoubleClicked.connect(self.toggleItem)
+        self.listWidget.itemChanged.connect(self.curveItemChanged)
+
+
+        self.delBtn1.clicked.connect(lambda: self.listWidget.removeItemWidget(self.listWidget.takeItem(self.listWidget.currentRow())))
+        self.delBtn2.clicked.connect(lambda: self.listWidget2.removeItemWidget(self.listWidget2.takeItem(self.listWidget2.currentRow())))
 
         self.btnH.clicked.connect(self.openHWindow)
         self.btnFiles.clicked.connect(self.openFileWindow)
@@ -38,15 +42,17 @@ class PlotToolApp(QMainWindow, PlotTool_MainWindow_design):
         self.curves = []
         self.excits = []
 
-    def listItemClicked(self, item):
+    def toggleItem(self, item):
         item.setCheckState(QtCore.Qt.Checked if item.checkState() != QtCore.Qt.Checked else QtCore.Qt.Unchecked)
-        #TODO: Mostrar/Ocultar curvas
+        #TODO: Mostrar/Ocultar/Actualizar curvas
 
     def curveItemChanged(self, item):
         index = self.listWidget.row(item)
-        if self.curves[index].name != item.text():
-            self.curves[index].name = item.text()
-            #TODO: updateCurves()
+        
+        # Cambio el nombre o la visibilidad, actualizo las curvas
+        self.curves[index].nombre = item.text()
+        self.curves[index].visibility = item.checkState() == QtCore.Qt.Checked
+        # TODO: updateCurves()
 
     # def updateCurvesList(self):
     #     # Update curves list
@@ -101,16 +107,20 @@ class PlotToolApp(QMainWindow, PlotTool_MainWindow_design):
             self.addCurve(fileCurve)
 
     def openRespWindow(self):
-        # Abrimos la ventana de seleccion de archivo
+        # Abrimos la ventana de generacion de la excitacion
         respW = Respuesta_Window()
         if(respW.exec()):   # Vuelve sin error
             # print(respW.name, respW.type, respW.amp, respW.freq, respW.freqType, resp.duty)
             excit = Excitation(name=respW.name, type=respW.type, amp=respW.amp, freq=respW.freq,    \
                                 freqType=respW.freqType, duty=respW.duty)
             self.addExcitation(excit)
+            # print(excit)
 
 
     def clearFigs(self):
+        self.listWidget.clear()
+        self.listWidget2.clear()
+
         self.widgetModulo.clear()
         self.widgetFase.clear()
         self.widgetRespuesta.clear()
