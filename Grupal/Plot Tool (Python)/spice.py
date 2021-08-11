@@ -113,11 +113,7 @@ def getDataFromFile(path, modo):
     
     return signal
 
-def getTransfFunct(numStr, denStr):
-    # Pasa los coeficientes de array(String) a array(float)
-    numList=numStr.split(",")
-    denList=denStr.split(",")
-
+def getTransfFunct(numList, denList):
     num=[]
     for index in range(len(numList)):
         num.append(float(numList[index]))
