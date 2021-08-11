@@ -122,7 +122,7 @@ def graphCurves(curves=[], axes=[], exitaciones = [], frec = 0):
     dibuje = [0,0]
 
     for i in range(len(curves)):
-        if self.H != 0:
+        if curves[i].H != 0:
             curves[i].data["time"].clear()  # Limpiamos las Respuestas
             curves[i].data["y"].clear()
 
