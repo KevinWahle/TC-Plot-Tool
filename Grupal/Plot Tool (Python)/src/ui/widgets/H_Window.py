@@ -44,11 +44,14 @@ class H_Window(QtWidgets.QDialog, H_Window_design):
 
     def okBtnClick(self):
         self.name = self.nombreT.text()
-        if self.name and self.numeradorT.hasAcceptableInput() and self.denominadorT.hasAcceptableInput() and self.tfOk\
-        and any(x!=0 for x in self.denArr):
+
+        self.removeLeadingZeros(self.numArr)
+        self.removeLeadingZeros(self.denArr)
+
+        if self.name and self.numeradorT.hasAcceptableInput() and self.denominadorT.hasAcceptableInput() and self.tfOk \
+        and self.numArr and self.denArr and len(self.denArr) >= len(self.numArr):   # H valida
             self.accept()
-        else:
-            print("La entrada no es válida")
+
 
     def updateTF(self):
         num = self.numeradorT.text()
@@ -70,6 +73,10 @@ class H_Window(QtWidgets.QDialog, H_Window_design):
         else:
             self.widgetTransferencia.setText("$H(s) =$")
 
+    def removeLeadingZeros(self, arr):
+            while len(arr) > 0 and arr[0] == 0:
+                arr.pop(0)
+
     # Convierte un arreglo de numeros en un polinomio de s
     def arrToPol(self, arr = [], var = 's'):
         pol = ''
@@ -79,7 +86,11 @@ class H_Window(QtWidgets.QDialog, H_Window_design):
                 if pol and arr[i] > 0:  # No es el primer elemento y es positivo
                     pol += ' + '
 
-                pol += "{:.2f}".format(arr[i])
+                if abs(arr[i]) != 1 or q<1:
+                    pol += "{:.2f}".format(arr[i])
+                elif arr[i] == -1:
+                    pol += '-'
+
                 if  q > 1:
                     pol += var + '^{' + str(q) + '}'
                 elif q==1:
