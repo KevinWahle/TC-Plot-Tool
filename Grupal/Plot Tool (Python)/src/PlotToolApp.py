@@ -21,6 +21,8 @@ class PlotToolApp(QMainWindow, PlotTool_MainWindow_design):
         self.checkFase.stateChanged.connect(lambda state: self.horizontalWidget_6.setVisible(state))    # Grafico de Fase
         self.checkRespuesta.stateChanged.connect(lambda state: self.verticalWidget_6.setVisible(state)) # Grafico de Respuesta
 
+        self.buttonGroup.buttonClicked.connect(self.updateGraphs)   # Cambio de escala de frecuencia
+
         # self.listWidget.setMovement(QListView.Free)
         # self.listWidget.setDefaultDropAction(QtCore.Qt.MoveAction)
         # self.listWidget2.setMovement(QListView.Free)
@@ -96,7 +98,7 @@ class PlotToolApp(QMainWindow, PlotTool_MainWindow_design):
         self.widgetFase.axes.set_xscale('log') 
 
         axes = [self.widgetModulo.axes, self.widgetFase.axes, self.widgetRespuesta.axes]
-        graphCurves(curves=self.curves, axes=axes, exitaciones = self.excits)
+        graphCurves(curves=self.curves, axes=axes, exitaciones = self.excits, frec=self.radioButtonW.isChecked())
 
         self.widgetModulo.draw()
         self.widgetFase.draw()
@@ -144,14 +146,14 @@ class PlotToolApp(QMainWindow, PlotTool_MainWindow_design):
 
     def removeCurrentCurve(self):
         index = self.listWidget.currentRow()
-        if index > 0:
+        if index >= 0:
             self.listWidget.removeItemWidget(self.listWidget.takeItem(index))
             self.curves.pop(index)
             self.updateGraphs()
 
     def removeCurrentExcit(self):
         index = self.listWidget2.currentRow()
-        if index > 0:
+        if index >= 0:
             self.listWidget2.removeItemWidget(self.listWidget2.takeItem(index))
             self.excits.pop(index)
             self.updateGraphs()

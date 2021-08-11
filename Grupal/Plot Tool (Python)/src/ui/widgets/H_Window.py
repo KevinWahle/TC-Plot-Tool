@@ -63,12 +63,10 @@ class H_Window(QtWidgets.QDialog, H_Window_design):
                 num = self.arrToPol(self.numArr)
                 den = self.arrToPol(self.denArr)
 
-
                 self.widgetTransferencia.setText("$H(s) = \\frac{" + num + "}{" + den + "}$" )
                 self.tfOk = True
             except:
                 self.tfOk = False
-                print("Entrada incorrecta")
         else:
             self.widgetTransferencia.setText("$H(s) =$")
 
