@@ -13,17 +13,17 @@ class Curve:
         if Hnum != "" and Hden != "":
             self.H = getTransfFunct(Hnum, Hden)
             self.data = getDataTeorica(self.H)
-            self.trazo = "dotted"
+            self.trazo = "solid"
 
         if ".txt" in path:
             self.H=0
             self.data = getDataSimulation(path, modo)
-            self.trazo = "solid"
+            self.trazo = "dashdot"
 
         elif ".csv" in path:
             self.H=0
             self.data = getDataMediciones(path, modo)
-            self.trazo= "dashdot"
+            self.trazo= "marker"
 
 
     def calcRta(self, exitacion):
@@ -48,34 +48,77 @@ class Curve:
         self.data["time"].append(t)   # Guardamos el arreglo temporal
         self.data["y"].append(y)      # Guardamos el arreglo Y
 
-    def graphCurve(self, axes=[], cIndex=0):  # axes = [ModuleAxis, PhaseAxis, ResponseAxis]
-
+    def graphCurve(self, axes=[], cIndex=0, frec = 0, exitaciones = []):  # axes = [ModuleAxis, PhaseAxis, ResponseAxis]
+        dibujeBode = dibujeRta = False
+        
         if self.visibility == True:
-            for index in range(len(self.data["frec"])):  # Grafico de Bodes
-                if index == 0:
-                    axes[0].plot(self.data["frec"][index], self.data["amp"][index], 
-                            color='C'+str(cIndex), linestyle = self.trazo, label= self.nombre)
-                    axes[1].plot(self.data["frec"][index], self.data["phase"][index], 
-                            color='C'+str(cIndex), linestyle = self.trazo, label= self.nombre)
+            for index in range(len(self.data["frec"])):  # Grafico de Bodes 
+                
+                if frec == 1:
+                    frecArr = np.multiply(self.data["frec"][index], 1/(2*np.pi))
                 else:
-                    axes[0].plot(self.data["frec"][index], self.data["amp"][index], 
-                            color='C'+str(cIndex), linestyle = self.trazo)
-                    axes[1].plot(self.data["frec"][index], self.data["phase"][index], 
-                            color='C'+str(cIndex), linestyle = self.trazo)
+                    frecArr = self.data["frec"][index]
+
+                if index == 0:  # Primera curva del arreglo
+
+                    if self.trazo == "marker":       # Caso mediciones (va con marker)
+                        axes[0].scatter(frecArr, self.data["amp"][index], 
+                                s=5, color='C'+str(cIndex), alpha=1, label= self.nombre)
+                        axes[1].scatter(frecArr, self.data["phase"][index], 
+                                s=5, color='C'+str(cIndex), alpha=1, label= self.nombre)
+                    
+
+                    else:                           # Caso no mediciones (va con linestyle)
+                        axes[0].plot(frecArr, self.data["amp"][index], 
+                                color='C'+str(cIndex), linestyle = self.trazo, label= self.nombre)
+                        axes[1].plot(frecArr, self.data["phase"][index], 
+                                color='C'+str(cIndex), linestyle = self.trazo, label= self.nombre)
+                
+                else:       # Caso montecarlo, no primera curva
+                    if self.trazo == "marker":      # Caso mediciones (va con marker)                      
+                        axes[0].plot(frecArr, self.data["amp"][index], 
+                                color='C'+str(cIndex), marker="o")
+                        axes[1].plot(frecArr, self.data["phase"][index], 
+                                color='C'+str(cIndex), marker="o")
+
+                    else:                           # Caso no mediciones (va con linestyle)
+                        axes[0].plot(frecArr, self.data["amp"][index], 
+                                color='C'+str(cIndex), linestyle = self.trazo)
+                        axes[1].plot(frecArr, self.data["phase"][index], 
+                                color='C'+str(cIndex), linestyle = self.trazo)
+                dibujeBode = True
         
             for index in range(len(self.data["time"])):  # Grafico de Rtas
                 if index == 0:
-                    axes[2].plot(self.data["time"][index], self.data["y"][index], 
-                            color='C'+str(cIndex), linestyle = self.trazo, label= self.nombre)
+
+                    if self.H == 0: # Si no hay transferencia, la curva NO es una rta
+                        my_label = self.nombre
+
+                    else:           # Si hay transferencia, la curva SI es una rta
+                        my_label = self.nombre+ "-" +exitaciones[index].name[:3]
+                    
+                    if self.trazo == "marker":       # Caso mediciones (va con marker)
+                        axes[2].scatter(self.data["time"][index], self.data["y"][index], 
+                                color='C'+str(cIndex), s=5, label= my_label)
+                    else:
+                        axes[2].plot(self.data["time"][index], self.data["y"][index], 
+                                color='C'+str(cIndex), linestyle = self.trazo, label= my_label)
                 else:
-                    axes[2].plot(self.data["time"][index], self.data["y"][index], 
-                        color='C'+str(cIndex), linestyle = self.trazo)
+                    if self.trazo == "marker":       # Caso mediciones (va con marker)
+                        axes[2].scatter(self.data["time"][index], self.data["y"][index], 
+                                color='C'+str(cIndex), s=5)
+                    else:
+                        axes[2].plot(self.data["time"][index], self.data["y"][index], 
+                                color='C'+str(cIndex), linestyle = self.trazo)
+                dibujeRta = True
+
+        return dibujeBode, dibujeRta       
 
     def setVisibility(self, state):
         self.visibility = state
 
-def graphCurves(curves=[], axes=[], exitaciones = []):
-    
+def graphCurves(curves=[], axes=[], exitaciones = [], frec = 0):
+
     for i in range(len(curves)):
         curves[i].data["time"].clear()  # Limpiamos las Respuestas
         curves[i].data["y"].clear()
@@ -84,10 +127,12 @@ def graphCurves(curves=[], axes=[], exitaciones = []):
             if excitacion.visibility == True and curves[i].H !=0 and curves[i].modo == 0:
                 curves[i].calcRta(excitacion)       
 
-        curves[i].graphCurve(axes, i)   # Graficamos la curva
+        dibuje = curves[i].graphCurve(axes, i, frec, exitaciones)   # Graficamos la curva
     
-    if any(x.visibility==True for x in curves):
-        for axis in axes:   # Para cada eje, ponemos leyendas y grillas
-            axis.legend()   
-            axis.grid() 
-        # if any(x.visibility==True for x in curves):
+    if dibuje[0] == True:               # Si dibuje algún Bode
+            axes[0].legend(); axes[1].legend()   
+            axes[0].grid(); axes[1].grid()
+
+    if dibuje[1] == True:               # Si dibujé alguna Rta
+        axes[2].legend()   
+        axes[2].grid()         

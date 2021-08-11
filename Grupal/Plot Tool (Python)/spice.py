@@ -143,38 +143,9 @@ def getDataTeorica(H):
 
     return signal
 
-
-#No se usa
-def calcRta(H, exitacion, w=0, A=0, duty=0.5):
-    
-    if exitacion == 0:                      # escalon
-        t, y = ss.step((H.num, H.den))      #https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.step.html#scipy.signal.step
-        
-    elif exitacion == 1:                    # senoidal
-        tMax= 5 * (2*np.pi/w)   
-        tin = np.linspace(0, tMax, 50000, endpoint=False)
-        seno = A*(np.sin(w*tin))
-        
-        t, y,  = ss.lsim((H.num, H.den), U=seno, T=tin)  # Calculamos la Rta
-    
-    elif exitacion == 2:                    # impulso
-        t, y = ss.impulse((H.num, H.den))   #https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.impulse.html#scipy.signal.impulse
-
-    elif exitacion == 3:                    # pulso
-        tMax= 5 * (2*np.pi/w)   
-        tin = np.linspace(0, tMax, 50000, endpoint=False)
-        cuadrada = ss.square(5*(2*np.pi)*tin, duty)     #https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.square.html#scipy.signal.square
-        t, y,  = ss.lsim((H.num, H.den), U=cuadrada, T=tin)  # Calculamos la Rta
-
-    #else:
-    # Cargar archivo de exitación. 
-
-    return  t, y        
-
-
 #Tests
 
-my_data=getDataFromFile("inputExamples\Basuli.txt", 0)  #Montecarlo
+#my_data=getDataFromFile("inputExamples\Basuli.txt", 0)  #Montecarlo
 #my_data=getDataFromFile("inputExamples\Ejemplo2-simulacion.txt", 0)  #No montecarlo
 #my_data=getDataTeorica("1,1,0","1,1,1")
 
