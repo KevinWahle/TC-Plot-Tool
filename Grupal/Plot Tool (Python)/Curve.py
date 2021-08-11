@@ -48,14 +48,15 @@ class Curve:
         self.data["time"].append(t)   # Guardamos el arreglo temporal
         self.data["y"].append(y)      # Guardamos el arreglo Y
 
-    def graphCurve(self, axes=[], cIndex=0, frec = 0, exitaciones = []):  # axes = [ModuleAxis, PhaseAxis, ResponseAxis]
-        dibujeBode = dibujeRta = False
+    def graphCurve(self, axes=[], cIndex=0, frec = 0, exitaciones = []):    # axes = [ModuleAxis, PhaseAxis, ResponseAxis]
+                                                                            # Freq: 0 = Hz; 1 = rad/s 
+        dibujeBode = dibujeRta = 0
         
         if self.visibility == True:
             for index in range(len(self.data["frec"])):  # Grafico de Bodes 
                 
                 if frec == 1:
-                    frecArr = np.multiply(self.data["frec"][index], 1/(2*np.pi))
+                    frecArr = np.multiply(self.data["frec"][index], 2*np.pi)
                 else:
                     frecArr = self.data["frec"][index]
 
@@ -86,16 +87,16 @@ class Curve:
                                 color='C'+str(cIndex), linestyle = self.trazo)
                         axes[1].plot(frecArr, self.data["phase"][index], 
                                 color='C'+str(cIndex), linestyle = self.trazo)
-                dibujeBode = True
+                dibujeBode = 1
         
             for index in range(len(self.data["time"])):  # Grafico de Rtas
-                if index == 0:
+                if index == 0 or self.H != 0:
 
                     if self.H == 0: # Si no hay transferencia, la curva NO es una rta
                         my_label = self.nombre
 
                     else:           # Si hay transferencia, la curva SI es una rta
-                        my_label = self.nombre+ "-" +exitaciones[index].name[:3]
+                        my_label = self.nombre+ "-" +exitaciones[index].name
                     
                     if self.trazo == "marker":       # Caso mediciones (va con marker)
                         axes[2].scatter(self.data["time"][index], self.data["y"][index], 
@@ -110,7 +111,7 @@ class Curve:
                     else:
                         axes[2].plot(self.data["time"][index], self.data["y"][index], 
                                 color='C'+str(cIndex), linestyle = self.trazo)
-                dibujeRta = True
+                dibujeRta = 1
 
         return dibujeBode, dibujeRta       
 
@@ -118,6 +119,7 @@ class Curve:
         self.visibility = state
 
 def graphCurves(curves=[], axes=[], exitaciones = [], frec = 0):
+    dibuje = [0,0]
 
     for i in range(len(curves)):
         curves[i].data["time"].clear()  # Limpiamos las Respuestas
@@ -127,12 +129,13 @@ def graphCurves(curves=[], axes=[], exitaciones = [], frec = 0):
             if excitacion.visibility == True and curves[i].H !=0 and curves[i].modo == 0:
                 curves[i].calcRta(excitacion)       
 
-        dibuje = curves[i].graphCurve(axes, i, frec, exitaciones)   # Graficamos la curva
+        aux = curves[i].graphCurve(axes, i, frec, exitaciones)   # Graficamos la curva
+        dibuje = np.add(aux, dibuje)
     
-    if dibuje[0] == True:               # Si dibuje algún Bode
+    if dibuje[0] > 0:               # Si dibuje algún Bode
             axes[0].legend(); axes[1].legend()   
             axes[0].grid(); axes[1].grid()
 
-    if dibuje[1] == True:               # Si dibujé alguna Rta
+    if dibuje[1] > 0:               # Si dibujé alguna Rta
         axes[2].legend()   
-        axes[2].grid()         
+        axes[2].grid()                

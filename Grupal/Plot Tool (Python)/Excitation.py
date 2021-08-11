@@ -3,7 +3,7 @@ import scipy.signal as ss
 
 class Excitation:
     def __init__(self, name, type, amp=0, freq=0, freqType='F', duty=1):    # Type: 0 Escalon, 1 Senoidal, 2 Impulso, 3 tren de pulsos
-        self.name = name                                              # FreqType: F en Hz, W en rad/s
+        self.name = name                                                    # FreqType: F en Hz, W en rad/s
         self.type = type
         self.amp = amp
         self.freq = freq if freqType == 'W' else 2*np.pi*freq
