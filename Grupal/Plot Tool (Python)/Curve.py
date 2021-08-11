@@ -122,8 +122,9 @@ def graphCurves(curves=[], axes=[], exitaciones = [], frec = 0):
     dibuje = [0,0]
 
     for i in range(len(curves)):
-        curves[i].data["time"].clear()  # Limpiamos las Respuestas
-        curves[i].data["y"].clear()
+        if self.H != 0:
+            curves[i].data["time"].clear()  # Limpiamos las Respuestas
+            curves[i].data["y"].clear()
 
         for excitacion in exitaciones:  # Para cada excitación, le calculamos la respuesta a cada curva teórica
             if excitacion.visibility == True and curves[i].H !=0 and curves[i].modo == 0:
