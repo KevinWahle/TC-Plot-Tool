@@ -60,36 +60,47 @@ class Curve:
                 else:
                     frecArr = self.data["frec"][index]
 
+                if len(self.data["frec"]) > 1:
+                    curveColor = "lightgray"
+                else:
+                    curveColor = 'C'+str(cIndex)
+
                 if index == 0:  # Primera curva del arreglo
 
                     if self.trazo == "marker":       # Caso mediciones (va con marker)
                         axes[0].scatter(frecArr, self.data["amp"][index], 
-                                s=5, color='C'+str(cIndex), alpha=1, label= self.nombre)
+                                s=5, color=curveColor, alpha=1, label= self.nombre)
                         axes[1].scatter(frecArr, self.data["phase"][index], 
-                                s=5, color='C'+str(cIndex), alpha=1, label= self.nombre)
+                                s=5, color=curveColor, alpha=1, label= self.nombre)
                     
 
                     else:                           # Caso no mediciones (va con linestyle)
                         axes[0].plot(frecArr, self.data["amp"][index], 
-                                color='C'+str(cIndex), linestyle = self.trazo, label= self.nombre)
+                                color=curveColor, linestyle = self.trazo, label= self.nombre)
                         axes[1].plot(frecArr, self.data["phase"][index], 
-                                color='C'+str(cIndex), linestyle = self.trazo, label= self.nombre)
+                                color=curveColor, linestyle = self.trazo, label= self.nombre)
                 
                 else:       # Caso montecarlo, no primera curva
                     if self.trazo == "marker":      # Caso mediciones (va con marker)                      
                         axes[0].plot(frecArr, self.data["amp"][index], 
-                                color='C'+str(cIndex), marker="o")
+                                color=curveColor, marker="o")
                         axes[1].plot(frecArr, self.data["phase"][index], 
-                                color='C'+str(cIndex), marker="o")
+                                color=curveColor, marker="o")
 
                     else:                           # Caso no mediciones (va con linestyle)
                         axes[0].plot(frecArr, self.data["amp"][index], 
-                                color='C'+str(cIndex), linestyle = self.trazo)
+                                color=curveColor, linestyle = self.trazo)
                         axes[1].plot(frecArr, self.data["phase"][index], 
-                                color='C'+str(cIndex), linestyle = self.trazo)
+                                color=curveColor, linestyle = self.trazo)
                 dibujeBode = 1
         
             for index in range(len(self.data["time"])):  # Grafico de Rtas
+                
+                if len(self.data["time"]) > 1:
+                    curveColor = "lightgray"
+                else:
+                    curveColor = 'C'+str(cIndex)
+                
                 if index == 0 or self.H != 0:
 
                     if self.H == 0: # Si no hay transferencia, la curva NO es una rta
@@ -100,17 +111,17 @@ class Curve:
                     
                     if self.trazo == "marker":       # Caso mediciones (va con marker)
                         axes[2].scatter(self.data["time"][index], self.data["y"][index], 
-                                color='C'+str(cIndex), s=5, label= my_label)
+                                color=curveColor, s=5, label= my_label)
                     else:
                         axes[2].plot(self.data["time"][index], self.data["y"][index], 
-                                color='C'+str(cIndex), linestyle = self.trazo, label= my_label)
+                                color=curveColor, linestyle = self.trazo, label= my_label)
                 else:
                     if self.trazo == "marker":       # Caso mediciones (va con marker)
                         axes[2].scatter(self.data["time"][index], self.data["y"][index], 
-                                color='C'+str(cIndex), s=5)
+                                color=curveColor, s=5)
                     else:
                         axes[2].plot(self.data["time"][index], self.data["y"][index], 
-                                color='C'+str(cIndex), linestyle = self.trazo)
+                                color=curveColor, linestyle = self.trazo)
                 dibujeRta = 1
 
         return dibujeBode, dibujeRta       

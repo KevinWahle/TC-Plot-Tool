@@ -23,7 +23,7 @@ class Excitation:
             return None
             
         elif self.type == 0:                    # Senoidal
-            tMax= 5*T       # Duracion: 5 periodos
+            tMax= 20*T       # Duracion: 5 periodos
             tin = np.linspace(0, tMax, 50000, endpoint=False)
             seno = A*(np.sin(w*tin))
             return tin, seno
@@ -32,7 +32,7 @@ class Excitation:
             return None
 
         elif self.type == 2:                    # Tren de pulsos
-            tMax= 5*T       # Duracion: 5 periodos
+            tMax= 20*T       # Duracion: 5 periodos
             tin = np.linspace(0, tMax, 50000, endpoint=False)
             cuadrada = self.amp*(ss.square(w*tin, self.duty)+1)/2   # Adaptacion de 0 a 1V con frecuencia deseada
             return tin, cuadrada
