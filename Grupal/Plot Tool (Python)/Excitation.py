@@ -42,7 +42,7 @@ class Excitation:
         if self.visibility == True:
             color = 'C' + str(cIndex)
             if self.type == 3:  # Impulso
-                axis.stem(0, 1, linefmt=color, markerfmt=color+'^', label=self.name)     # Dibujo una flecha del origen a (0, 1)
+                axis.stem([0], [1], linefmt=color, markerfmt=color+'^', label=self.name)     # Dibujo una flecha del origen a (0, 1)
             else:
                 t, y = self.getValues()
                 axis.plot(t,y, color=color, label=self.name)

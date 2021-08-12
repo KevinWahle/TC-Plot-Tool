@@ -1,5 +1,6 @@
 from scipy.signal.ltisys import TransferFunction
 from spice import *
+from Excitation import *
 class Curve:
 
     # Modo: 0  frecuencia | Moduulo | Fase
@@ -130,16 +131,23 @@ class Curve:
         self.visibility = state
 
 def graphCurves(curves=[], axes=[], exitaciones = [], frec = 0):
-    dibuje = [0,0]
+    dibuje = [0,0]  # DibujeBode, dibujeRta
+    exitacionesDibujadas = np.zeros_like(exitaciones) # Arreglo con flags si las exitaciones fueron o no dibujadas.
 
     for i in range(len(curves)):
+        
         if curves[i].H != 0:
-            curves[i].data["time"].clear()  # Limpiamos las Respuestas
-            curves[i].data["y"].clear()
+            curves[i].data["time"].clear()  # Limpiamos sólo las Respuestas
+            curves[i].data["y"].clear()      
 
-        for excitacion in exitaciones:  # Para cada excitación, le calculamos la respuesta a cada curva teórica
-            if excitacion.visibility == True and curves[i].H !=0 and curves[i].modo == 0:
-                curves[i].calcRta(excitacion)       
+        for j in range(len(exitaciones)):  # Para cada excitación, le calculamos la respuesta a cada curva teórica
+            if exitaciones[j].visibility == True and curves[i].H !=0 and curves[i].modo == 0:
+                curves[i].calcRta(exitaciones[j])
+
+            if exitaciones[j].visibility == True and exitacionesDibujadas[j] == 0:
+                exitaciones[j].graphExcit(axes[2], j+len(curves))       # Graficamos las exitaciones visibles
+                exitacionesDibujadas[j]=1                               
+
 
         aux = curves[i].graphCurve(axes, i, frec, exitaciones)   # Graficamos la curva
         dibuje = np.add(aux, dibuje)
