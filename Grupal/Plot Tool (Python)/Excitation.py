@@ -18,24 +18,36 @@ class Excitation:
         A = self.amp
         w = self.freq
         T = 2*np.pi/w  if w!= 0 else 0
-
-        if self.type == 1:                      # Escalon
-            return None
+        tMax= 20*T       # Duracion: 20 periodos
             
-        elif self.type == 0:                    # Senoidal
-            tMax= 20*T       # Duracion: 5 periodos
+        if self.type == 0:                    # Senoidal
             tin = np.linspace(0, tMax, 50000, endpoint=False)
             seno = A*(np.sin(w*tin))
             return tin, seno
 
-        elif self.type == 3:                    # Impulso
-            return None
+        elif self.type == 1:                      # Escalon
+            tin = np.linspace(0, 10, 100, endpoint=False)   # Por 10 segundos
+            step = A*np.ones(100)
+            return tin, step
 
         elif self.type == 2:                    # Tren de pulsos
-            tMax= 20*T       # Duracion: 5 periodos
             tin = np.linspace(0, tMax, 50000, endpoint=False)
             cuadrada = self.amp*(ss.square(w*tin, self.duty)+1)/2   # Adaptacion de 0 a 1V con frecuencia deseada
             return tin, cuadrada
+
+        elif self.type == 3:                    # Impulso
+            return None
+
+    def graphExcit(self, axis, cIndex=0):
+        if self.visibility == True:
+            color = 'C' + str(cIndex)
+            if self.type == 3:  # Impulso
+                axis.stem(0, 1, linefmt=color, markerfmt=color+'^', label=self.name)     # Dibujo una flecha del origen a (0, 1)
+            else:
+                t, y = self.getValues()
+                axis.plot(t,y, color=color, label=self.name)
+
+
 
     # For Debug
     def __str__(self) -> str:
