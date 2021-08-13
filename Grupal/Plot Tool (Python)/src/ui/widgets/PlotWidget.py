@@ -2,11 +2,12 @@
 # -------------------- PlotWidget.py --------------------
 # ------------------------------------------------------
 import sys
-from PyQt5.QtWidgets import QApplication, QWidget, QVBoxLayout
+from PyQt5.QtWidgets import QApplication, QFileDialog, QPushButton, QWidget, QVBoxLayout
 
 from matplotlib.figure import Figure
 from matplotlib.backends.backend_qt5agg import FigureCanvas, NavigationToolbar2QT
 
+import csv
 from src.ui.widgets.LabelEditWidget import LabelEditWidget
 # from LabelEditWidget import LabelEditWidget
 
@@ -20,7 +21,12 @@ class PlotWidget(QWidget):
         self.toolbar = NavigationToolbar2QT(self.canvas, self)
         self.canvas.figure.tight_layout()
 
-        # Add widget to toolbar
+        # Add widgets to toolbar
+            # Export to CSV Widget
+        self.btnExport = QPushButton()
+        self.btnExport.setText("CSV")
+        self.toolbar.insertWidget(self.toolbar.actions()[len(self.toolbar.actions())-1], self.btnExport)
+            # Labeledit Widget
         self.labelEdit = LabelEditWidget()
         self.toolbar.insertSeparator(self.toolbar.actions()[len(self.toolbar.actions())-1])
         self.toolbar.insertWidget(self.toolbar.actions()[len(self.toolbar.actions())-1], self.labelEdit)
@@ -33,6 +39,8 @@ class PlotWidget(QWidget):
         self.setLayout(vlayout)
 
         # Connect inputs with on_change method
+        self.btnExport.clicked.connect(self._exportCSV)
+        
         self.labelEdit.x_input.textChanged.connect(self._update_label)
         self.labelEdit.y_input.textChanged.connect(self._update_label)
 
@@ -93,6 +101,30 @@ class PlotWidget(QWidget):
         except:
             # print('Entrada inválida')
             pass
+
+    def _exportCSV(self):
+
+        filename, _ = QFileDialog.getSaveFileName(self, 'Export CSV', '', 'CSV File (*.csv);;All Files (*)')
+
+        if filename:
+
+            lines =  self.axes.get_lines()  # Arreglo de todas las curvas
+            
+            x_label = self.axes.get_xlabel()
+            if not x_label:
+                x_label = 'Eje X'   # Nombre por default
+                
+            # writing to csv file  
+            with open(filename, 'w', newline='') as csvFile:  
+                # creating a csv writer object  
+                writer = csv.writer(csvFile)  
+                    
+                for line in lines:
+                    # Escribimos los nombres
+                    writer.writerow([x_label, line.get_label()])  
+                        
+                    # writing the data rows  
+                    writer.writerows(line.get_xydata())
 
 
 if __name__ == "__main__":
