@@ -119,30 +119,46 @@ class PlotToolApp(QMainWindow, PlotTool_MainWindow_design):
         self.updateGraphs()
         
 
-    def openHWindow(self):
-        # Abrimos la ventana de seleccion de archivo
-        transFuncW = H_Window()
-        if(transFuncW.exec()):   # Vuelve sin error
-            # print(transFuncW.name, transFuncW.numArr, transFuncW.denArr)
-            Hcurve = Curve(nombre=transFuncW.name, Hnum=transFuncW.numArr, Hden=transFuncW.denArr)
-            self.addCurve(Hcurve)
+    def openHWindow(self):        
+        while(True):
+            try:
+                # Abrimos la ventana de seleccion de archivo
+                transFuncW = H_Window()
+                if(transFuncW.exec()):   # Vuelve sin error
+                    # print(transFuncW.name, transFuncW.numArr, transFuncW.denArr)
+                    Hcurve = Curve(nombre=transFuncW.name, Hnum=transFuncW.numArr, Hden=transFuncW.denArr)
+                    self.addCurve(Hcurve)
+                break
+            except:
+                pass
+
 
     def openFileWindow(self):
-        # Abrimos la ventana de seleccion de archivo
-        fileW = FromFile_Window()
-        if(fileW.exec()):   # Vuelve sin error
-            # print(fileW.name, fileW.path, fileW.type)
-            fileCurve = Curve(nombre=fileW.name, path=fileW.path, modo=fileW.type)
-            self.addCurve(fileCurve)
+        while(True):
+            try:
+                # Abrimos la ventana de seleccion de archivo
+                fileW = FromFile_Window()
+                if(fileW.exec()):   # Vuelve sin error
+                    # print(fileW.name, fileW.path, fileW.type)
+                    fileCurve = Curve(nombre=fileW.name, path=fileW.path, modo=fileW.type)
+                    self.addCurve(fileCurve)
+                break
+            except:
+                pass
 
     def openRespWindow(self):
-        # Abrimos la ventana de generacion de la excitacion
-        respW = Respuesta_Window()
-        if(respW.exec()):   # Vuelve sin error
-            # print(respW.name, respW.type, respW.amp, respW.freq, respW.freqType, resp.duty)
-            excit = Excitation(name=respW.name, type=respW.type, amp=respW.amp, freq=respW.freq,    \
-                                freqType=respW.freqType, duty=respW.duty)
-            self.addExcitation(excit)
+        while(True):
+            try:
+                # Abrimos la ventana de generacion de la excitacion
+                respW = Respuesta_Window()
+                if(respW.exec()):   # Vuelve sin error
+                    # print(respW.name, respW.type, respW.amp, respW.freq, respW.freqType, resp.duty)
+                    excit = Excitation(name=respW.name, type=respW.type, amp=respW.amp, freq=respW.freq,    \
+                                        freqType=respW.freqType, duty=respW.duty)
+                    self.addExcitation(excit)
+                break
+            except:
+                pass
 
     def removeCurrentCurve(self):
         index = self.listWidget.currentRow()
