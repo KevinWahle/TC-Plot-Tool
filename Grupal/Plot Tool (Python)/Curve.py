@@ -97,10 +97,10 @@ class Curve:
         
             for index in range(len(self.data["time"])):  # Grafico de Rtas
                 
-                if len(self.data["time"]) > 1:
-                    curveColor = "lightgray"
+                if len(self.data["time"]) > 1 and self.H == 0:  # Si es montecarlo en el tiempo,
+                    curveColor = "lightgray"                    # pinto de color gris
                 else:
-                    curveColor = 'C'+str(cIndex)
+                    curveColor = 'C'+str(cIndex)                # Sino le doy colorcitos
                 
                 if index == 0 or self.H != 0:
 
