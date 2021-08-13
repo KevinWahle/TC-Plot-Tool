@@ -87,16 +87,24 @@ class H_Window(QtWidgets.QDialog, H_Window_design):
                     pol += ' + '
 
                 if abs(arr[i]) != 1 or q<1:
-                    pol += "{:.2f}".format(arr[i])
+                    base, exp = self.toBaseExp(arr[i])
+                    if (exp < -1 or exp > 3):      # Numeros muy grandes o muy chicos los muestro en notacion cienifica
+                        pol += str(base) + '\\times10^{'+str(exp)+'}\ '
+                    else:
+                        pol += "{:.2f}".format(arr[i]) + '\ '
                 elif arr[i] == -1:
                     pol += '-'
 
                 if  q > 1:
-                    pol += var + '^{' + str(q) + '}'
+                    pol +=  var + '^{' + str(q) + '}'
                 elif q==1:
                     pol += var
 
         return pol if pol else '0'
+
+    def toBaseExp(self, num):
+        str = "{:.2e}".format(num)
+        return (float(str[:4]), int(str[-3:]))  # Tomo base y exponente del numero
 
 
 if __name__ == "__main__":
