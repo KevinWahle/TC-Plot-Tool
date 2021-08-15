@@ -2,7 +2,8 @@
 # -------------------- PlotWidget.py --------------------
 # ------------------------------------------------------
 import sys
-from PyQt5.QtWidgets import QApplication, QFileDialog, QPushButton, QWidget, QVBoxLayout
+from PyQt5.QtGui import QIcon
+from PyQt5.QtWidgets import QApplication, QFileDialog, QToolButton, QWidget, QVBoxLayout
 
 from matplotlib.figure import Figure
 from matplotlib.backends.backend_qt5agg import FigureCanvas, NavigationToolbar2QT
@@ -23,8 +24,8 @@ class PlotWidget(QWidget):
 
         # Add widgets to toolbar
             # Export to CSV Widget
-        self.btnExport = QPushButton()
-        self.btnExport.setText("CSV")
+        self.btnExport = QToolButton()
+        self.btnExport.setIcon(QIcon("res/csv.png"))
         self.toolbar.insertWidget(self.toolbar.actions()[len(self.toolbar.actions())-1], self.btnExport)
             # Labeledit Widget
         self.labelEdit = LabelEditWidget()
@@ -43,6 +44,9 @@ class PlotWidget(QWidget):
         
         self.labelEdit.x_input.textChanged.connect(self._update_label)
         self.labelEdit.y_input.textChanged.connect(self._update_label)
+
+        # self.canvas.mpl_connect('button_press_event', self._onclick)      # Agrega puntos al hacer click
+
 
 
     # Sobrescribiendo el metodo para que siempre este e tight layout
@@ -125,6 +129,12 @@ class PlotWidget(QWidget):
                         
                     # writing the data rows  
                     writer.writerows(line.get_xydata())
+
+
+    def _onclick(self, event):
+        # print('button=%d, x=%d, y=%d, xdata=%f, ydata=%f' %(event.button, event.x, event.y, event.xdata, event.ydata))
+        self.axes.plot(event.xdata, event.ydata, ',')
+        self.canvas.draw()
 
 
 if __name__ == "__main__":
