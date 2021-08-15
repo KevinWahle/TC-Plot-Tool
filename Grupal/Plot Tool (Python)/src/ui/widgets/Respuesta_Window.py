@@ -44,6 +44,7 @@ class Respuesta_Window(QtWidgets.QDialog, Respuesta_Window_design):
         self.freq = 0
         self.freqType = self.getFreqType()
         self.duty = 1
+        self.path = ''
 
     def getFreqType(self):
         return 'F' if self.radioButtonF.isChecked() else 'W'

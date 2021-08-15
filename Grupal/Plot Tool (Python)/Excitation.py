@@ -1,14 +1,20 @@
 import numpy as np
+import pandas as pd
 import scipy.signal as ss
 
 class Excitation:
-    def __init__(self, name, type, amp=0, freq=0, freqType='F', duty=1):    # Type: 0 Escalon, 1 Senoidal, 2 Impulso, 3 tren de pulsos
+    def __init__(self, name, type, amp=0, freq=0, freqType='F', duty=1, path=''):    # Type: 0 Escalon, 1 Senoidal, 2 Impulso, 3 tren de pulsos
         self.name = name                                                    # FreqType: F en Hz, W en rad/s
         self.type = type
         self.amp = amp
         self.freq = freq if freqType == 'W' else 2*np.pi*freq
         self.duty = duty
+        self.path = path
         self.visibility = True
+        self.dict = {}
+
+        if type == 4:
+            self.dict = self._saveValuesFromCSV(path)
     
     def setVisibility(self, state=True):
         self.visibility = state
@@ -38,6 +44,9 @@ class Excitation:
         elif self.type == 3:                    # Impulso
             return None
 
+        elif self.type == 4:                    # Desde archivo CSV
+            return self.dict['time'], self.dict['y']
+
     def graphExcit(self, axis, cIndex=0):
         if self.visibility == True:
             color = 'C' + str(cIndex)
@@ -47,7 +56,16 @@ class Excitation:
                 t, y = self.getValues()
                 axis.plot(t,y, color=color, label=self.name)
 
+    def _saveValuesFromCSV(self, path):
+        data = (pd.read_csv(path)).to_numpy()       # Pasamos de .csv a matriz 
+        aux={"time":[], "y":[]}  # Diccionario aux para manipular los datos.
 
+        filas= (data.shape)[0]
+        for index in range(filas):
+                aux["time"].append(data[index][0])      # Para cada columna, appendeo TODOS los datos de cada una 
+                aux["y"].append(data[index][1])         # de sus filas en un arreglo distinto. 
+
+        return aux
 
     # For Debug
     def __str__(self) -> str:

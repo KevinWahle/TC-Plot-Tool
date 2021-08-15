@@ -154,7 +154,7 @@ class PlotToolApp(QMainWindow, PlotTool_MainWindow_design):
                 if(respW.exec()):   # Vuelve sin error
                     # print(respW.name, respW.type, respW.amp, respW.freq, respW.freqType, resp.duty)
                     excit = Excitation(name=respW.name, type=respW.type, amp=respW.amp, freq=respW.freq,    \
-                                        freqType=respW.freqType, duty=respW.duty)
+                                        freqType=respW.freqType, duty=respW.duty, path=respW.path)
                     self.addExcitation(excit)
                 break
             except:
