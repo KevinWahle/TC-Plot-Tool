@@ -30,8 +30,12 @@ class Curve:
     def calcRta(self, exitacion):
 
         if exitacion.type == 1:                      # escalon
-            t, y = ss.step((self.H.num, self.H.den))        #https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.step.html#scipy.signal.step
-            y = y * exitacion.amp
+            tin,step =exitacion.getValues()
+            t, y,_ = ss.lsim((self.H.num, self.H.den), U=step, T=tin)
+            #Modo viejo
+            #t, y = ss.step((self.H.num, self.H.den))        #https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.step.html#scipy.signal.step
+            #y = y * exitacion.amp
+        
         elif exitacion.type == 0:                    # senoidal
             tin,seno =exitacion.getValues()
             t, y,_  = ss.lsim((self.H.num, self.H.den), U=seno, T=tin)  # Calculamos la Rta
