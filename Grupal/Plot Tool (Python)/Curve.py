@@ -1,5 +1,5 @@
 from scipy.signal.ltisys import TransferFunction
-from spice import *
+from fileReader import *
 from Excitation import *
 class Curve:
 
