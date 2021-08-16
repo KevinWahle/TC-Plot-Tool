@@ -47,8 +47,11 @@ class Curve:
             tin,cuadrada = exitacion.getValues()
             t, y,_ = ss.lsim((self.H.num, self.H.den), U=cuadrada, T=tin) # Calculamos la Rta
 
-        #else:
         # Cargar archivo de exitación. 
+        else:
+            tin, signal = exitacion.getValues()
+            t, y,_ = ss.lsim((self.H.num, self.H.den), U=signal, T=tin) # Calculamos la Rta
+
 
         self.data["time"].append(t)   # Guardamos el arreglo temporal
         self.data["y"].append(y)      # Guardamos el arreglo Y
