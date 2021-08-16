@@ -38,10 +38,12 @@ def Data2Dict(data, modo):
             aux["amp"].append(float(bode[0]))    # Agregamos la Amp al dict   
             
             #Limitamos el rango de la fase entre -180 y 180
-            if bode[1] > 180:
+            if float(bode[1]) > 180:
                 bode[1] -= 360
-            elif bode[1] < -180:
+            elif float(bode[1]) < -180:
                 bode[1] +=360
+            
+            print(bode[1])
 
             aux["phase"].append(float(bode[1]))  # Agregamos la Fase al dict
         
