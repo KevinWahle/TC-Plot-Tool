@@ -42,8 +42,6 @@ def Data2Dict(data, modo):
                 bode[1] -= 360
             elif float(bode[1]) < -180:
                 bode[1] +=360
-            
-            print(bode[1])
 
             aux["phase"].append(float(bode[1]))  # Agregamos la Fase al dict
         
