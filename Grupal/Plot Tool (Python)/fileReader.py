@@ -149,12 +149,3 @@ def getDataTeorica(H):
     signal = simBode(H, signal) 
 
     return signal
-
-#Tests
-
-#my_data=getDataFromFile("inputExamples\Basuli.txt", 0)  #Montecarlo
-#my_data=getDataFromFile("inputExamples\Ejemplo2-simulacion.txt", 0)  #No montecarlo
-#my_data=getDataTeorica("1,1,0","1,1,1")
-
-#print(my_data["amp"][4])
-#print(len(my_data["frec"]))

@@ -45,7 +45,7 @@ class PlotWidget(QWidget):
         self.labelEdit.x_input.textChanged.connect(self._update_label)
         self.labelEdit.y_input.textChanged.connect(self._update_label)
 
-        # self.canvas.mpl_connect('button_press_event', self._onclick)      # Agrega puntos al hacer click
+        self.canvas.mpl_connect('button_press_event', self._onclick)      # Agrega puntos al hacer click
 
 
 
@@ -132,9 +132,10 @@ class PlotWidget(QWidget):
 
 
     def _onclick(self, event):
-        # print('button=%d, x=%d, y=%d, xdata=%f, ydata=%f' %(event.button, event.x, event.y, event.xdata, event.ydata))
-        self.axes.plot(event.xdata, event.ydata, ',')
-        self.canvas.draw()
+        #print('button=%d, x=%d, y=%d, xdata=%f, ydata=%f' %(event.button, event.x, event.y, event.xdata, event.ydata))
+        if event.button == 3:
+            self.axes.plot(event.xdata, event.ydata, '.')
+            self.canvas.draw()
 
 
 if __name__ == "__main__":
