@@ -80,9 +80,9 @@ class Curve:
 
                     if self.trazo == "marker":       # Caso mediciones (va con marker)
                         axes[0].scatter(frecArr, self.data["amp"][index], 
-                                s=5, color=curveColor, alpha=1, label= self.nombre, alpha=alpha)
+                                s=5, color=curveColor, label= self.nombre, alpha=alpha)
                         axes[1].scatter(frecArr, self.data["phase"][index], 
-                                s=5, color=curveColor, alpha=1, label= self.nombre, alpha=alpha)
+                                s=5, color=curveColor, label= self.nombre, alpha=alpha)
                     
 
                     else:                           # Caso no mediciones (va con linestyle)
