@@ -150,8 +150,6 @@ def simBode(H, signal):
         else:
             aux.append(elem)
 
-    print(bode[2])
-    print(aux)
     signal["phase"].append(aux)
 
     return signal
