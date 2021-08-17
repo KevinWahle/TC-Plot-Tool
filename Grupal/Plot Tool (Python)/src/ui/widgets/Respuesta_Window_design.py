@@ -237,6 +237,7 @@ class Respuesta_Window_design(object):
         self.radioButtonSenoidal.clicked.connect(self.horizontalWidget_5.close)
         self.radioButtonImpulsiva.clicked.connect(self.horizontalWidget.hide)
         self.radioButtonImpulsiva.clicked.connect(self.horizontalWidget_4.hide)
+        self.radioButtonImpulsiva.clicked.connect(self.horizontalWidget_6.hide)
         self.radioButtonTrenDePulsos.clicked.connect(self.horizontalWidget_4.show)
         self.radioButtonTrenDePulsos.clicked.connect(self.horizontalWidget_5.show)
         self.radioButtonEscalon.clicked.connect(self.horizontalWidget_5.hide)
