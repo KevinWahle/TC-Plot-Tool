@@ -139,7 +139,20 @@ def simBode(H, signal):
     bode = ss.bode(H)                           # Calculamos el Bode
     signal["frec"].append(bode[0]/(2*np.pi))    # Guardamos el Bode
     signal["amp"].append(bode[1])
-    signal["phase"].append(bode[2])
+    
+    aux=[]
+    for elem in bode[2]:
+        #Limitamos el rango de la fase entre -180 y 180
+        if elem > 180:
+            aux.append(elem - 360)
+        elif elem < -180:
+            aux.append(elem + 360)
+        else:
+            aux.append(elem)
+
+    print(bode[2])
+    print(aux)
+    signal["phase"].append(aux)
 
     return signal
 
