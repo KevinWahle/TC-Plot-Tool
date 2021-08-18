@@ -148,6 +148,13 @@ def graphCurves(curves=[], axes=[], exitaciones = [], frec = 0):
     dibuje = [0,0]  # DibujeBode, dibujeRta
     exitacionesDibujadas = np.zeros_like(exitaciones) # Arreglo con flags si las exitaciones fueron o no dibujadas.
 
+    # Primero dibujamos las funciones de excitacion
+    for j in range(len(exitaciones)):
+        if exitaciones[j].visibility:
+            exitaciones[j].graphExcit(axes[2], j+len(curves))       # Graficamos las exitaciones visibles
+            exitacionesDibujadas[j]=1
+            dibuje = np.add([0,1], dibuje)          # Es asi???                        
+    
     for i in range(len(curves)):
         
         if curves[i].H != 0:
@@ -158,14 +165,17 @@ def graphCurves(curves=[], axes=[], exitaciones = [], frec = 0):
             if exitaciones[j].visibility == True and curves[i].H !=0 and curves[i].modo == 0:
                 curves[i].calcRta(exitaciones[j])
 
-            if exitaciones[j].visibility == True and exitacionesDibujadas[j] == 0:
-                exitaciones[j].graphExcit(axes[2], j+len(curves))       # Graficamos las exitaciones visibles
-                exitacionesDibujadas[j]=1                               
+            # Lo comento porque se grafican aparte, aunque no haya curvas
+            # if exitaciones[j].visibility == True and exitacionesDibujadas[j] == 0:
+            #     exitaciones[j].graphExcit(axes[2], j+len(curves))       # Graficamos las exitaciones visibles
+            #     exitacionesDibujadas[j]=1
 
 
         aux = curves[i].graphCurve(axes, i, frec, exitaciones)   # Graficamos la curva
         dibuje = np.add(aux, dibuje)
     
+
+
     if dibuje[0] > 0:               # Si dibuje algún Bode
             axes[0].legend(); axes[1].legend()   
             axes[0].grid(); axes[1].grid()
