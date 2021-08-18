@@ -72,8 +72,8 @@ class Curve:
                 if len(self.data["frec"]) > 1:
                     self.trazo = "solid"
                     curveColor = "lightgray"
-                    alpha=0.15
-                    zorder = 0
+                    alpha=1
+                    zorder = 0.5
                 else:
                     curveColor = 'C'+str(cIndex)
                     alpha=1
@@ -113,8 +113,8 @@ class Curve:
                 if len(self.data["time"]) > 1 and self.H == 0:  # Si es montecarlo en el tiempo,
                     curveColor = "lightgray"                    # pinto de color gris
                     self.trazo = "solid"
-                    alpha=0.15
-                    zorder = 0
+                    alpha=1
+                    zorder = 0.5
                 else:
                     curveColor = 'C'+str(cIndex)                # Sino le doy colorcitos
                     alpha=1
