@@ -73,19 +73,19 @@ class Curve:
                     self.trazo = "solid"
                     curveColor = "lightgray"
                     alpha=1
-                    zorder = 0.5
+                    zorder = 1
                 else:
                     curveColor = 'C'+str(cIndex)
                     alpha=1
-                    zorder = 1
+                    zorder = 2
 
                 if index == 0:  # Primera curva del arreglo
 
                     if self.trazo == "marker":       # Caso mediciones (va con marker)
                         axes[0].scatter(frecArr, self.data["amp"][index], 
-                                s=5, color=curveColor, label= self.nombre, alpha=alpha, zorder=2)
+                                s=5, color=curveColor, label= self.nombre, alpha=alpha, zorder=3)
                         axes[1].scatter(frecArr, self.data["phase"][index], 
-                                s=5, color=curveColor, label= self.nombre, alpha=alpha, zorder=2)
+                                s=5, color=curveColor, label= self.nombre, alpha=alpha, zorder=3)
                     
 
                     else:                           # Caso no mediciones (va con linestyle)
@@ -114,11 +114,11 @@ class Curve:
                     curveColor = "lightgray"                    # pinto de color gris
                     self.trazo = "solid"
                     alpha=1
-                    zorder = 0.5
+                    zorder = 1
                 else:
                     curveColor = 'C'+str(cIndex)                # Sino le doy colorcitos
                     alpha=1
-                    zorder = 1
+                    zorder = 2
 
                 if index == 0 or self.H != 0:
 
@@ -130,10 +130,10 @@ class Curve:
                     
                     if self.trazo == "marker":       # Caso mediciones (va con marker)
                         axes[2].scatter(self.data["time"][index], self.data["y"][index], 
-                                color=curveColor, s=5, label= my_label, alpha=alpha, zorder=2)
+                                color=curveColor, s=5, label= my_label, alpha=alpha, zorder=3)
                     else:
                         axes[2].plot(self.data["time"][index], self.data["y"][index], 
-                                color=curveColor, linestyle = self.trazo, label= my_label, alpha=alpha, zorder=2)
+                                color=curveColor, linestyle = self.trazo, label= my_label, alpha=alpha, zorder=3)
                 else:
                     if self.trazo == "marker":       # Caso mediciones (va con marker)
                         axes[2].scatter(self.data["time"][index], self.data["y"][index], 
@@ -182,8 +182,11 @@ def graphCurves(curves=[], axes=[], exitaciones = [], frec = 0):
 
     if dibuje[0] > 0:               # Si dibuje algún Bode
             axes[0].legend(); axes[1].legend()   
-            axes[0].grid(which='both'); axes[1].grid(which='both')
+            axes[0].grid(which='both', zorder=0); axes[1].grid(which='both', zorder=0)
+            axes[0].set_axisbelow(True); axes[1].set_axisbelow(True)
+
 
     if dibuje[1] > 0:               # Si dibujé alguna Rta
         axes[2].legend()   
-        axes[2].grid()                
+        axes[2].grid(zorder=0)
+        axes[2].set_axisbelow(True)     
