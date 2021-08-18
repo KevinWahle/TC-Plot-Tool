@@ -29,25 +29,25 @@ class Curve:
 
     def calcRta(self, exitacion):
 
-        if exitacion.type == 1:                      # escalon
+        if exitacion.type == 0:                    # senoidal
+            tin,seno =exitacion.getValues()
+            t, y,_  = ss.lsim((self.H.num, self.H.den), U=seno, T=tin)  # Calculamos la Rta
+        
+        elif exitacion.type == 1:                      # escalon
             #Modo nuevo
             #tin,step =exitacion.getValues()
             #t, y,_ = ss.lsim((self.H.num, self.H.den), U=step, T=tin)
             #Modo viejo
             t, y = ss.step((self.H.num, self.H.den))        #https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.step.html#scipy.signal.step
-            y = y * exitacion.amp
-        
-        elif exitacion.type == 0:                    # senoidal
-            tin,seno =exitacion.getValues()
-            t, y,_  = ss.lsim((self.H.num, self.H.den), U=seno, T=tin)  # Calculamos la Rta
-        
-        elif exitacion.type == 3:                    # impulso
-            t, y = ss.impulse((self.H.num, self.H.den))     #https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.impulse.html#scipy.signal.impulse
+            y = y * exitacion.amp  
 
-        elif exitacion.type == 2:                    # cuadrada
+        elif exitacion.type == 2:                           # cuadrada
             tin,cuadrada = exitacion.getValues()
             t, y,_ = ss.lsim((self.H.num, self.H.den), U=cuadrada, T=tin) # Calculamos la Rta
 
+        elif exitacion.type == 3:                           # impulso
+            t, y = ss.impulse((self.H.num, self.H.den))     #https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.impulse.html#scipy.signal.impulse
+        
         # Cargar archivo de exitación. 
         else:
             tin, signal = exitacion.getValues()
