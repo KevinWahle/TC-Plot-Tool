@@ -14,7 +14,7 @@ class Excitation:
         self.dict = {}
 
         if type == 4:
-            self.dict = self._saveValuesFromCSV(path)
+            self.dict = self._fileToDict(path)
     
     def setVisibility(self, state=True):
         self.visibility = state
@@ -56,14 +56,21 @@ class Excitation:
                 t, y = self.getValues()
                 axis.plot(t,y, color=color, label=self.name, alpha=alpha)
 
-    def _saveValuesFromCSV(self, path):
-        data = (pd.read_csv(path)).to_numpy()       # Pasamos de .csv a matriz 
-        aux={"time":[], "y":[]}  # Diccionario aux para manipular los datos.
+    def _fileToDict(self, path):
 
-        filas= (data.shape)[0]
-        for index in range(filas):
-                aux["time"].append(data[index][0])      # Para cada columna, appendeo TODOS los datos de cada una 
-                aux["y"].append(data[index][1])         # de sus filas en un arreglo distinto. 
+        aux = {"time":[], "y":[]}  # Diccionario aux para manipular los datos.
+        lines = []
+        if path.endswith(".txt"):
+            file = open(path, "r")
+            file.readline()         # Descarto la primera linea (header)
+            lines = [[float(x) for x in line.split('\t')] for line in file.readlines()]
+            file.close()
+        elif path.endswith(".csv"):
+            lines = (pd.read_csv(path)).to_numpy()       # Pasamos de .csv a matriz
+
+        for i in range(len(lines)):             # Para cada fila, tomo los datos y los guardo en arreglos
+                aux["time"].append(lines[i][0])
+                aux["y"].append(lines[i][1])
 
         return aux
 

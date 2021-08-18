@@ -57,7 +57,7 @@ class Respuesta_Window(QtWidgets.QDialog, Respuesta_Window_design):
                         None,
                         "Select File",
                         "",
-                        "CSV File (*.csv)",
+                        "Simulation Files (*.txt | *.csv);;Text File (*.txt);;CSV File (*.csv)",
                         )
         if fileName:
             self.pathT.setText(fileName)

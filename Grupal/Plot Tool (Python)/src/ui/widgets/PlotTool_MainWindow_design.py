@@ -17,7 +17,7 @@ class PlotTool_MainWindow_design(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
         MainWindow.setWindowModality(QtCore.Qt.WindowModal)
-        MainWindow.resize(938, 750)
+        MainWindow.resize(1000, 750)
         MainWindow.setMinimumSize(QtCore.QSize(0, 0))
         MainWindow.setStyleSheet("")
         MainWindow.setUnifiedTitleAndToolBarOnMac(False)
