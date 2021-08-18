@@ -47,14 +47,14 @@ class Excitation:
         elif self.type == 4:                    # Desde archivo CSV
             return self.dict['time'], self.dict['y']
 
-    def graphExcit(self, axis, cIndex=0):
+    def graphExcit(self, axis, cIndex=0, alpha=0.75):
         if self.visibility == True:
             color = 'C' + str(cIndex)
             if self.type == 3:  # Impulso
-                axis.stem([0], [1], linefmt=color, markerfmt=color+'^', label=self.name)     # Dibujo una flecha del origen a (0, 1)
+                axis.stem([0], [1], linefmt=color, markerfmt=color+'^', label=self.name, alpha=alpha)     # Dibujo una flecha del origen a (0, 1)
             else:
                 t, y = self.getValues()
-                axis.plot(t,y, color=color, label=self.name)
+                axis.plot(t,y, color=color, label=self.name, alpha=alpha)
 
     def _saveValuesFromCSV(self, path):
         data = (pd.read_csv(path)).to_numpy()       # Pasamos de .csv a matriz 
