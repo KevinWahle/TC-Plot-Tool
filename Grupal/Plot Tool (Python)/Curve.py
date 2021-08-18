@@ -73,37 +73,39 @@ class Curve:
                     self.trazo = "solid"
                     curveColor = "lightgray"
                     alpha=0.15
+                    zorder = 0
                 else:
                     curveColor = 'C'+str(cIndex)
                     alpha=1
+                    zorder = 1
 
                 if index == 0:  # Primera curva del arreglo
 
                     if self.trazo == "marker":       # Caso mediciones (va con marker)
                         axes[0].scatter(frecArr, self.data["amp"][index], 
-                                s=5, color=curveColor, label= self.nombre, alpha=alpha)
+                                s=5, color=curveColor, label= self.nombre, alpha=alpha, zorder=2)
                         axes[1].scatter(frecArr, self.data["phase"][index], 
-                                s=5, color=curveColor, label= self.nombre, alpha=alpha)
+                                s=5, color=curveColor, label= self.nombre, alpha=alpha, zorder=2)
                     
 
                     else:                           # Caso no mediciones (va con linestyle)
                         axes[0].plot(frecArr, self.data["amp"][index], color=curveColor, 
-                                    linestyle = self.trazo, label= self.nombre, alpha=alpha)
+                                    linestyle = self.trazo, label= self.nombre, alpha=alpha, zorder=zorder)
                         axes[1].plot(frecArr, self.data["phase"][index], color=curveColor, 
-                                    linestyle = self.trazo, label= self.nombre, alpha=alpha)
+                                    linestyle = self.trazo, label= self.nombre, alpha=alpha, zorder=zorder)
                 
                 else:       # Caso montecarlo, no primera curva
                     if self.trazo == "marker":      # Caso mediciones (va con marker)                      
                         axes[0].plot(frecArr, self.data["amp"][index], 
-                                color=curveColor, marker="o", alpha=alpha)
+                                color=curveColor, marker="o", alpha=alpha, zorder=zorder)
                         axes[1].plot(frecArr, self.data["phase"][index], 
-                                color=curveColor, marker="o", alpha=alpha)
+                                color=curveColor, marker="o", alpha=alpha, zorder=zorder)
 
                     else:                           # Caso no mediciones (va con linestyle)
                         axes[0].plot(frecArr, self.data["amp"][index], 
-                                color=curveColor, linestyle = self.trazo, alpha=alpha)
+                                color=curveColor, linestyle = self.trazo, alpha=alpha, zorder=zorder)
                         axes[1].plot(frecArr, self.data["phase"][index], 
-                                color=curveColor, linestyle = self.trazo, alpha=alpha)
+                                color=curveColor, linestyle = self.trazo, alpha=alpha, zorder=zorder)
                 dibujeBode = 1
         
             for index in range(len(self.data["time"])):  # Grafico de Rtas
@@ -112,9 +114,11 @@ class Curve:
                     curveColor = "lightgray"                    # pinto de color gris
                     self.trazo = "solid"
                     alpha=0.15
+                    zorder = 0
                 else:
                     curveColor = 'C'+str(cIndex)                # Sino le doy colorcitos
                     alpha=1
+                    zorder = 1
 
                 if index == 0 or self.H != 0:
 
@@ -122,21 +126,21 @@ class Curve:
                         my_label = self.nombre
 
                     else:           # Si hay transferencia, la curva SI es una rta
-                        my_label = self.nombre+ "-" +exitaciones[index].name
+                        my_label = self.nombre+ "-" + exitaciones[index].name
                     
                     if self.trazo == "marker":       # Caso mediciones (va con marker)
                         axes[2].scatter(self.data["time"][index], self.data["y"][index], 
-                                color=curveColor, s=5, label= my_label, alpha=alpha)
+                                color=curveColor, s=5, label= my_label, alpha=alpha, zorder=2)
                     else:
                         axes[2].plot(self.data["time"][index], self.data["y"][index], 
-                                color=curveColor, linestyle = self.trazo, label= my_label, alpha=alpha)
+                                color=curveColor, linestyle = self.trazo, label= my_label, alpha=alpha, zorder=2)
                 else:
                     if self.trazo == "marker":       # Caso mediciones (va con marker)
                         axes[2].scatter(self.data["time"][index], self.data["y"][index], 
-                                color=curveColor, s=5, alpha=alpha)
+                                color=curveColor, s=5, alpha=alpha, zorder=zorder)
                     else:
                         axes[2].plot(self.data["time"][index], self.data["y"][index], 
-                                color=curveColor, linestyle = self.trazo, alpha=alpha)
+                                color=curveColor, linestyle = self.trazo, alpha=alpha, zorder=zorder)
                 dibujeRta = 1
 
         return dibujeBode, dibujeRta       
