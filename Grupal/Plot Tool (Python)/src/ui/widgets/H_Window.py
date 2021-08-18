@@ -23,7 +23,7 @@ class H_Window(QtWidgets.QDialog, H_Window_design):
 
         # Expresion regular para tomar valores validos de numeros decimales separados por comas (punto separador decimal)
         # Se usa para validar que la entrada sea valida, por eso no puede terminar con ',' o con un numero incompleto ni vacio
-        regexVal = QtGui.QRegExpValidator(QtCore.QRegExp("((\+|-)?\d+\.?\d*(e(\+|-)?\d+)?($|,(?!$)))+"))
+        regexVal = QtGui.QRegExpValidator(QtCore.QRegExp("((\+|-)?\d+\.?\d*((e|E)(\+|-)?\d+)?($|,(?!$)))+"))
 
         self.numeradorT.setValidator(regexVal)
         self.denominadorT.setValidator(regexVal)

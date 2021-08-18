@@ -22,10 +22,10 @@ class Respuesta_Window(QtWidgets.QDialog, Respuesta_Window_design):
         self.setupUi(self)
 
         # Validacion para las entradas de texto
-        regexVal = QtGui.QRegExpValidator(QtCore.QRegExp("(\+|-)?\d+\.?\d*(e(\+|-)?\d+)?"))     # Cualquier numero real
+        regexVal = QtGui.QRegExpValidator(QtCore.QRegExp("(\+|-)?\d+\.?\d*((e|E)(\+|-)?\d+)?"))     # Cualquier numero real
         self.amplitudT.setValidator(regexVal)
         
-        regexVal = QtGui.QRegExpValidator(QtCore.QRegExp("\d+\.?\d*(e(\+|-)?\d+)?"))    # Solo numeros positivos
+        regexVal = QtGui.QRegExpValidator(QtCore.QRegExp("\d+\.?\d*((e|E)(\+|-)?\d+)?"))    # Solo numeros positivos
         self.frecuenciaAngularT.setValidator(regexVal)
         self.dutyCycleT.setValidator(regexVal)
 
