@@ -1,5 +1,5 @@
-from PyQt5.QtWidgets import QApplication
 import sys
+from PyQt5.QtWidgets import QApplication
 from src.PlotToolApp import PlotToolApp
 
 app = QApplication(sys.argv)

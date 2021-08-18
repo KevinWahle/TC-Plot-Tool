@@ -1,6 +1,6 @@
 import matplotlib.pyplot as plt
-from Curve import *
-from Excitation import *
+from src.Curve import *
+from src.Excitation import *
 
 fig1, axAmp = plt.subplots()
 fig2, axPh = plt.subplots()

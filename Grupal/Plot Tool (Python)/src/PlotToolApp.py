@@ -1,14 +1,14 @@
-from Excitation import Excitation
 from PyQt5 import QtCore
-from PyQt5.QtWidgets import QListView, QListWidgetItem, QMainWindow
-from Curve import Curve, graphCurves
+from PyQt5.QtWidgets import QListWidgetItem, QMainWindow
 from src.ui.widgets.PlotTool_MainWindow_design import PlotTool_MainWindow_design
-# from src.ui.widgets.PlotTool_MainWindow_design import PlotTool_MainWindow_design
 from src.ui.widgets.FromFile_Window import FromFile_Window
 from src.ui.widgets.H_Window import H_Window
 from src.ui.widgets.Respuesta_Window import Respuesta_Window
 
-from fileReader import *
+from src.Curve import Curve, graphCurves
+from src.Excitation import Excitation
+from src.fileReader import *
+
 class PlotToolApp(QMainWindow, PlotTool_MainWindow_design):
     def __init__(self, *args, **kwargs):
         # Inicializacion

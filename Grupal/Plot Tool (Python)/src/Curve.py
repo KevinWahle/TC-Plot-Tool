@@ -1,6 +1,6 @@
-from scipy.signal.ltisys import TransferFunction
-from fileReader import *
-from Excitation import *
+from src.fileReader import *
+from src.Excitation import *
+
 class Curve:
 
     # Modo: 0  frecuencia | Moduulo | Fase

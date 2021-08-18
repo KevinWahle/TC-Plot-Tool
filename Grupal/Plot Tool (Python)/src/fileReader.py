@@ -1,6 +1,5 @@
 # Vale la pena guardar el tiempo?
 
-
 import numpy as np
 import pandas as pd
 import scipy.signal as ss
