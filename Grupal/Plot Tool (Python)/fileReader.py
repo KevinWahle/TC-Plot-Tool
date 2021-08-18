@@ -87,6 +87,8 @@ def getDataSimulation(path, modo):
     headers[len(headers)-1]=headers[len(headers)-1].replace("\n","")
     
     data = file.readlines()
+    file.close()
+    
     if "Step" in data[0]:
         signal = getDataFromMonteCarlo(data, modo)
     else:
