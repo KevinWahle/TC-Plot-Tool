@@ -38,7 +38,7 @@ class Excitation:
 
         elif self.type == 2:                    # Tren de pulsos
             tin = np.linspace(0, tMax, 50000, endpoint=False)
-            cuadrada = self.amp*(ss.square(w*tin, self.duty)+1)/2   # Adaptacion de 0 a 1V con frecuencia deseada
+            cuadrada = self.amp*ss.square(w*tin, self.duty)
             return tin, cuadrada
 
         elif self.type == 3:                    # Impulso
