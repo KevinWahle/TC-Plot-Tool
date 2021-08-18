@@ -134,7 +134,7 @@ class PlotWidget(QWidget):
     def _onclick(self, event):
         #print('button=%d, x=%d, y=%d, xdata=%f, ydata=%f' %(event.button, event.x, event.y, event.xdata, event.ydata))
         if event.button == 3:
-            self.axes.plot(event.xdata, event.ydata, '.')
+            self.axes.plot(event.xdata, event.ydata, '.', markersize=15)
             self.canvas.draw()
 
 
