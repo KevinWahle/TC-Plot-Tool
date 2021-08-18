@@ -178,7 +178,7 @@ def graphCurves(curves=[], axes=[], exitaciones = [], frec = 0):
 
     if dibuje[0] > 0:               # Si dibuje algún Bode
             axes[0].legend(); axes[1].legend()   
-            axes[0].grid(); axes[1].grid()
+            axes[0].grid(which='both'); axes[1].grid(which='both')
 
     if dibuje[1] > 0:               # Si dibujé alguna Rta
         axes[2].legend()   
