@@ -34,10 +34,6 @@ class Curve:
             t, y,_  = ss.lsim((self.H.num, self.H.den), U=seno, T=tin)  # Calculamos la Rta
         
         elif exitacion.type == 1:                      # escalon
-            #Modo nuevo
-            #tin,step =exitacion.getValues()
-            #t, y,_ = ss.lsim((self.H.num, self.H.den), U=step, T=tin)
-            #Modo viejo
             t, y = ss.step((self.H.num, self.H.den))        #https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.step.html#scipy.signal.step
             y = y * exitacion.amp  
 
@@ -71,7 +67,7 @@ class Curve:
 
                 if len(self.data["frec"]) > 1:
                     self.trazo = "solid"
-                    curveColor = "lightgray"
+                    curveColor = "grey"
                     alpha=1
                     zorder = 1
                 else:
@@ -111,7 +107,7 @@ class Curve:
             for index in range(len(self.data["time"])):  # Grafico de Rtas
                 
                 if len(self.data["time"]) > 1 and self.H == 0:  # Si es montecarlo en el tiempo,
-                    curveColor = "lightgray"                    # pinto de color gris
+                    curveColor = "grey"                    # pinto de color gris
                     self.trazo = "solid"
                     alpha=1
                     zorder = 1
