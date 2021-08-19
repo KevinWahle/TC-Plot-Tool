@@ -137,8 +137,7 @@ def getTransfFunct(numList, denList):
 def simBode(H, signal):
     signal={"frec":[], "amp":[], "phase":[], "time":[], "y":[]}
 
-    w=np.linspace(1,1e9, num=1e9)
-    bode = ss.bode(H, w=w)                           # Calculamos el Bode
+    bode = ss.bode(H)                           # Calculamos el Bode
     signal["frec"].append(bode[0]/(2*np.pi))    # Guardamos el Bode
     signal["amp"].append(bode[1])
     
