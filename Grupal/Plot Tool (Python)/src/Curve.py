@@ -122,7 +122,8 @@ class Curve:
                         my_label = self.nombre
 
                     else:           # Si hay transferencia, la curva SI es una rta
-                        my_label = self.nombre+ "-" + exitaciones[index].name
+                        exiVisibles = [exitacion for exitacion in exitaciones if exitacion.visibility == True]
+                        my_label = self.nombre+ "-" + exiVisibles[index].name
                     
                     if self.trazo == "marker":       # Caso mediciones (va con marker)
                         axes[2].scatter(self.data["time"][index], self.data["y"][index], 
@@ -185,4 +186,4 @@ def graphCurves(curves=[], axes=[], exitaciones = [], frec = 0):
     if dibuje[1] > 0:               # Si dibujé alguna Rta
         axes[2].legend()   
         axes[2].grid(zorder=0)
-        axes[2].set_axisbelow(True)     
+        axes[2].set_axisbelow(True) 
