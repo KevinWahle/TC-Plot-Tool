@@ -24,7 +24,7 @@ class Excitation:
         A = self.amp
         w = self.freq
         T = 2*np.pi/w  if w!= 0 else 0
-        tMax= 20*T       # Duracion: 20 periodos
+        tMax= 50*T       # Duracion: 20 periodos
             
         if self.type == 0:                    # Senoidal
             tin = np.linspace(0, tMax, 50000, endpoint=False)
