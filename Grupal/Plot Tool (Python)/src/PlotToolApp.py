@@ -129,8 +129,8 @@ class PlotToolApp(QMainWindow, PlotTool_MainWindow_design):
                     Hcurve = Curve(nombre=transFuncW.name, Hnum=transFuncW.numArr, Hden=transFuncW.denArr)
                     self.addCurve(Hcurve)
                 break
-            except:
-                pass
+            except Exception as e:
+                print(e)
 
 
     def openFileWindow(self):
@@ -143,8 +143,8 @@ class PlotToolApp(QMainWindow, PlotTool_MainWindow_design):
                     fileCurve = Curve(nombre=fileW.name, path=fileW.path, modo=fileW.type)
                     self.addCurve(fileCurve)
                 break
-            except:
-                pass
+            except Exception as e:
+                print(e)
 
     def openRespWindow(self):
         while(True):
@@ -157,8 +157,8 @@ class PlotToolApp(QMainWindow, PlotTool_MainWindow_design):
                                         freqType=respW.freqType, duty=respW.duty, path=respW.path)
                     self.addExcitation(excit)
                 break
-            except:
-                pass
+            except Exception as e:
+                print(e)
 
     def removeCurrentCurve(self):
         index = self.listWidget.currentRow()
