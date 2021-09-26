@@ -62,8 +62,8 @@ class PlotWidget(QWidget):
 
     # Borra los ejes
     def clear(self):
-        self.labelEdit.x_input.setText('')
-        self.labelEdit.y_input.setText('')
+        # self.labelEdit.x_input.setText('')
+        # self.labelEdit.y_input.setText('')
         self.axes.clear()
         self.canvas.draw()
         self.canvas.figure.tight_layout()
