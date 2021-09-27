@@ -1,5 +1,3 @@
-# Vale la pena guardar el tiempo?
-
 import numpy as np
 import pandas as pd
 import scipy.signal as ss
@@ -137,7 +135,9 @@ def getTransfFunct(numList, denList):
 def simBode(H, signal):
     signal={"frec":[], "amp":[], "phase":[], "time":[], "y":[]}
 
-    bode = ss.bode(H)                           # Calculamos el Bode
+    w=np.logspace(1,7, num=10000)   # Fijamos la transferencia de 10 a 10M
+
+    bode = ss.bode(H,w=w)                           # Calculamos el Bode
     signal["frec"].append(bode[0]/(2*np.pi))    # Guardamos el Bode
     signal["amp"].append(bode[1])
     
