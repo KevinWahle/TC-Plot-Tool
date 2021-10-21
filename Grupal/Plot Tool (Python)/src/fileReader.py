@@ -32,6 +32,7 @@ def Data2Dict(data, modo):
 
             
             bode = bode.split(",")                  # Separamos el bode en Amp y Fase
+            # bode[0]=10**(float(bode[0])/20.0)    #Descomentar para escalas no logarítmicas
             aux["amp"].append(float(bode[0]))    # Agregamos la Amp al dict   
             
             #Limitamos el rango de la fase entre -180 y 180
@@ -135,10 +136,18 @@ def getTransfFunct(numList, denList):
 def simBode(H, signal):
     signal={"frec":[], "amp":[], "phase":[], "time":[], "y":[]}
 
+<<<<<<< Updated upstream
     w=np.logspace(1,7, num=10000)   # Fijamos la transferencia de 10 a 10M
 
     bode = ss.bode(H,w=w)                           # Calculamos el Bode
     signal["frec"].append(bode[0]/(2*np.pi))    # Guardamos el Bode
+=======
+    frec=np.linspace(1,1e6, num=int(1e4))
+    bode = ss.bode(H, w=2*np.pi*frec)                   # Calculamos el Bode
+    signal["frec"].append(bode[0]/(2*np.pi))            # Guardamos el Bode
+    #for i in range(len(bode[1])):                       #Descomentar para transferencias no logaritmicas
+    #    bode[1][i]=10**(bode[1][i]/20)                  #Descomentar para transferencias no logaritmicas
+>>>>>>> Stashed changes
     signal["amp"].append(bode[1])
     
     aux=[]

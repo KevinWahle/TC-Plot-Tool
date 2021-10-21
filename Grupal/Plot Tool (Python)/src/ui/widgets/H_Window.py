@@ -49,7 +49,7 @@ class H_Window(QtWidgets.QDialog, H_Window_design):
         self.removeLeadingZeros(self.denArr)
 
         if self.name and self.numeradorT.hasAcceptableInput() and self.denominadorT.hasAcceptableInput() and self.tfOk \
-        and self.numArr and self.denArr and len(self.denArr) >= len(self.numArr):   # H valida
+        and self.numArr and self.denArr: # and len(self.denArr) >= len(self.numArr):   # H valida
             self.accept()
 
 
