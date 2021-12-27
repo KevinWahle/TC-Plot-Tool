@@ -78,10 +78,10 @@ class Curve:
                 if index == 0:  # Primera curva del arreglo
 
                     if self.trazo == "marker":       # Caso mediciones (va con marker)
-                        axes[0].scatter(frecArr, self.data["amp"][index], 
-                                s=5, color=curveColor, label= self.nombre, alpha=alpha, zorder=2.5)
-                        axes[1].scatter(frecArr, self.data["phase"][index], 
-                                s=5, color=curveColor, label= self.nombre, alpha=alpha, zorder=2.5)
+                        axes[0].plot(frecArr, self.data["amp"][index], 
+                                marker=".", color=curveColor, label= self.nombre, alpha=alpha, zorder=2.5)
+                        axes[1].plot(frecArr, self.data["phase"][index], 
+                                marker=".", color=curveColor, label= self.nombre, alpha=alpha, zorder=2.5)
                     
 
                     else:                           # Caso no mediciones (va con linestyle)
@@ -126,15 +126,15 @@ class Curve:
                         my_label = self.nombre+ "-" + exiVisibles[index].name
                     
                     if self.trazo == "marker":       # Caso mediciones (va con marker)
-                        axes[2].scatter(self.data["time"][index], self.data["y"][index], 
-                                color=curveColor, s=5, label= my_label, alpha=alpha, zorder=2.5)
+                        axes[2].plot(self.data["time"][index], self.data["y"][index], 
+                                color=curveColor, marker=".", label= my_label, alpha=alpha, zorder=2.5)
                     else:
                         axes[2].plot(self.data["time"][index], self.data["y"][index], 
                                 color=curveColor, linestyle = self.trazo, label= my_label, alpha=alpha, zorder=2.5)
                 else:
                     if self.trazo == "marker":       # Caso mediciones (va con marker)
-                        axes[2].scatter(self.data["time"][index], self.data["y"][index], 
-                                color=curveColor, s=5, alpha=alpha, zorder=zorder)
+                        axes[2].plot(self.data["time"][index], self.data["y"][index], 
+                                color=curveColor, marker=".", alpha=alpha, zorder=zorder)
                     else:
                         axes[2].plot(self.data["time"][index], self.data["y"][index], 
                                 color=curveColor, linestyle = self.trazo, alpha=alpha, zorder=zorder)
@@ -165,12 +165,6 @@ def graphCurves(curves=[], axes=[], exitaciones = [], frec = 0):
         for j in range(len(exitaciones)):  # Para cada excitación, le calculamos la respuesta a cada curva teórica
             if exitaciones[j].visibility == True and curves[i].H !=0 and curves[i].modo == 0:
                 curves[i].calcRta(exitaciones[j])
-
-            # Lo comento porque se grafican aparte, aunque no haya curvas
-            # if exitaciones[j].visibility == True and exitacionesDibujadas[j] == 0:
-            #     exitaciones[j].graphExcit(axes[2], j+len(curves))       # Graficamos las exitaciones visibles
-            #     exitacionesDibujadas[j]=1
-
 
         aux = curves[i].graphCurve(axes, i, frec, exitaciones)   # Graficamos la curva
         dibuje = np.add(aux, dibuje)
