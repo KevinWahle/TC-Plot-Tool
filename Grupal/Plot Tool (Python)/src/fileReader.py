@@ -136,24 +136,32 @@ def getTransfFunct(numList, denList):
 def simBode(H, signal):
     signal={"frec":[], "amp":[], "phase":[], "time":[], "y":[]}
 
-    frec=np.linspace(1,1e6, num=int(1e4))
+    frec=np.logspace(0, 7, num=int(1e4))               # Fijado de 1 Hz a 10 MHz
+    
     bode = ss.bode(H, w=2*np.pi*frec)                   # Calculamos el Bode
-    signal["frec"].append(bode[0]/(2*np.pi))            # Guardamos el Bode
+    signal["frec"].append(frec)            
+
     #for i in range(len(bode[1])):                       #Descomentar para transferencias no logaritmicas
     #    bode[1][i]=10**(bode[1][i]/20)                  #Descomentar para transferencias no logaritmicas
-    signal["amp"].append(bode[1])
     
-    aux=[]
-    for elem in bode[2]:
-        #Limitamos el rango de la fase entre -180 y 180
-        if elem > 180:
-            aux.append(elem - 360)
-        elif elem < -180:
-            aux.append(elem + 360)
-        else:
-            aux.append(elem)
+    signal["amp"].append(bode[1])                       # Guardamos el Bode
+    
+    # aux=[]
+    # for elem in bode[2]:
+    #     #Limitamos el rango de la fase entre -180 y 180
+    #     if elem > 180:
+    #         aux.append(elem - 360)
+    #     elif elem < -180:
+    #         aux.append(elem + 360)
+    #     else:
+    #         aux.append(elem)
 
-    signal["phase"].append(aux)
+    phase = bode[2]
+
+    phase[phase > 180] -= 360
+    phase[phase < -180] += 360
+
+    signal["phase"].append(phase)
 
     return signal
 

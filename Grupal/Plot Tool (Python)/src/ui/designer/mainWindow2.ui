@@ -9,7 +9,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>938</width>
+    <width>1000</width>
     <height>750</height>
    </rect>
   </property>
@@ -226,6 +226,33 @@
              </layout>
             </widget>
            </item>
+           <item>
+            <layout class="QHBoxLayout" name="horizontalLayout_5">
+             <item>
+              <widget class="QRadioButton" name="radioButton">
+               <property name="text">
+                <string>Lineal</string>
+               </property>
+               <attribute name="buttonGroup">
+                <string notr="true">freqTypeGroup</string>
+               </attribute>
+              </widget>
+             </item>
+             <item>
+              <widget class="QRadioButton" name="freqLinRbtn">
+               <property name="text">
+                <string>Logarítmico</string>
+               </property>
+               <property name="checked">
+                <bool>true</bool>
+               </property>
+               <attribute name="buttonGroup">
+                <string notr="true">freqTypeGroup</string>
+               </attribute>
+              </widget>
+             </item>
+            </layout>
+           </item>
           </layout>
          </item>
          <item>
@@ -245,7 +272,7 @@
                </property>
                <property name="font">
                 <font>
-                 <pointsize>-1</pointsize>
+                 <pointsize>20</pointsize>
                  <weight>50</weight>
                  <italic>false</italic>
                  <bold>false</bold>
@@ -259,13 +286,13 @@ border-style:outset;
 border-width:2px;
 border-radius:10px;
 border-color:black;
-font: 30px;
+font: 20pt;
 min-height: 100px;
 min-width:160px;
 max-width:160px;</string>
                </property>
                <property name="text">
-                <string>H ($)</string>
+                <string>H (s)</string>
                </property>
               </widget>
              </item>
@@ -279,7 +306,7 @@ max-width:160px;</string>
                </property>
                <property name="font">
                 <font>
-                 <pointsize>-1</pointsize>
+                 <pointsize>15</pointsize>
                  <weight>50</weight>
                  <italic>false</italic>
                  <bold>false</bold>
@@ -293,7 +320,7 @@ border-style:outset;
 border-width:2px;
 border-radius:10px;
 border-color:black;
-font: 25px;
+font: 15pt;
 min-height: 100px;
 min-width:160px;
 max-width:160px;</string>
@@ -314,7 +341,7 @@ MEDICIONES</string>
                </property>
                <property name="font">
                 <font>
-                 <pointsize>-1</pointsize>
+                 <pointsize>12</pointsize>
                  <weight>50</weight>
                  <italic>false</italic>
                  <bold>false</bold>
@@ -328,7 +355,7 @@ border-style:outset;
 border-width:2px;
 border-radius:10px;
 border-color:black;
-font: 20px;
+font: 12pt;
 min-height: 100px;
 min-width:160px;
 max-width:160px;</string>
@@ -434,7 +461,7 @@ max-width:160px;</string>
              </property>
              <property name="icon">
               <iconset>
-               <normaloff>Grupal/DeleteBtn.png</normaloff>Grupal/DeleteBtn.png</iconset>
+               <normaloff>../../../res/DeleteBtn.png</normaloff>../../../res/DeleteBtn.png</iconset>
              </property>
              <property name="iconSize">
               <size>
@@ -516,7 +543,7 @@ max-width:160px;</string>
              </property>
              <property name="icon">
               <iconset>
-               <normaloff>Grupal/DeleteBtn.png</normaloff>Grupal/DeleteBtn.png</iconset>
+               <normaloff>../../../res/DeleteBtn.png</normaloff>../../../res/DeleteBtn.png</iconset>
              </property>
              <property name="iconSize">
               <size>
@@ -527,7 +554,7 @@ max-width:160px;</string>
             </widget>
            </item>
            <item>
-            <widget class="QWidget" name="" native="true">
+            <widget class="QWidget" name="widget" native="true">
              <property name="sizePolicy">
               <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
                <horstretch>0</horstretch>
@@ -545,7 +572,7 @@ max-width:160px;</string>
                 </property>
                 <property name="font">
                  <font>
-                  <pointsize>-1</pointsize>
+                  <pointsize>12</pointsize>
                   <weight>50</weight>
                   <italic>false</italic>
                   <bold>false</bold>
@@ -559,7 +586,7 @@ border-style:outset;
 border-width:2px;
 border-radius:10px;
 border-color:black;
-font: 20px;
+font: 12pt;
 min-height: 100px;
 min-width:160px;
 max-width:160px;</string>
@@ -692,7 +719,7 @@ max-width:160px;</string>
   <customwidget>
    <class>PlotWidget</class>
    <extends>QWidget</extends>
-   <header>PlotWidget.h</header>
+   <header>src.ui.widgets.PlotWidget</header>
    <container>1</container>
   </customwidget>
  </customwidgets>
@@ -700,5 +727,6 @@ max-width:160px;</string>
  <connections/>
  <buttongroups>
   <buttongroup name="buttonGroup"/>
+  <buttongroup name="freqTypeGroup"/>
  </buttongroups>
 </ui>

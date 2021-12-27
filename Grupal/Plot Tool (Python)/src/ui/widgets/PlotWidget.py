@@ -17,10 +17,10 @@ class PlotWidget(QWidget):
         super().__init__(parent)
 
         #  Create widgets
-        self.canvas = FigureCanvas(Figure())
+        self.canvas = FigureCanvas(Figure(constrained_layout=True))
         self.axes = self.canvas.figure.subplots()
         self.toolbar = NavigationToolbar2QT(self.canvas, self)
-        self.canvas.figure.tight_layout()
+        # self.canvas.figure.tight_layout()
 
         # Add widgets to toolbar
             # Export to CSV Widget
@@ -49,16 +49,16 @@ class PlotWidget(QWidget):
 
 
 
-    # Sobrescribiendo el metodo para que siempre este e tight layout
-    def resizeEvent(self, event):
-        super().resizeEvent(event)
-        self.canvas.figure.tight_layout()
+    # # Sobrescribiendo el metodo para que siempre este en tight layout
+    # def resizeEvent(self, event):
+    #     super().resizeEvent(event)
+    #     # self.canvas.figure.tight_layout()
 
 
     # Para dibujar directamente
     def draw(self):
         self.canvas.draw()
-        self.canvas.figure.tight_layout()
+        # self.canvas.figure.tight_layout()
 
     # Borra los ejes
     def clear(self):
@@ -66,7 +66,7 @@ class PlotWidget(QWidget):
         # self.labelEdit.y_input.setText('')
         self.axes.clear()
         self.canvas.draw()
-        self.canvas.figure.tight_layout()
+        # self.canvas.figure.tight_layout()
 
     # def drawModule(self, H, *args, freq='rad', **kargs):
     #     try:

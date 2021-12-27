@@ -119,7 +119,61 @@
       </layout>
      </item>
      <item>
-      <widget class="TeXtLabel" name="widgetTransferencia" native="true"/>
+      <widget class="TeXLabel" name="widgetTransferencia" native="true"/>
+     </item>
+     <item>
+      <layout class="QHBoxLayout" name="horizontalLayout_4">
+       <item>
+        <widget class="QRadioButton" name="freqLinRbtn">
+         <property name="text">
+          <string>Lineal</string>
+         </property>
+         <attribute name="buttonGroup">
+          <string notr="true">freqTypeGroup</string>
+         </attribute>
+        </widget>
+       </item>
+       <item>
+        <widget class="QRadioButton" name="freqLogRbtn">
+         <property name="text">
+          <string>Logarítmica</string>
+         </property>
+         <property name="checked">
+          <bool>true</bool>
+         </property>
+         <attribute name="buttonGroup">
+          <string notr="true">freqTypeGroup</string>
+         </attribute>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <layout class="QHBoxLayout" name="horizontalLayout_5">
+       <property name="sizeConstraint">
+        <enum>QLayout::SetDefaultConstraint</enum>
+       </property>
+       <item>
+        <widget class="QLineEdit" name="lineEdit_2">
+         <property name="alignment">
+          <set>Qt::AlignCenter</set>
+         </property>
+         <property name="placeholderText">
+          <string>1</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLineEdit" name="lineEdit">
+         <property name="alignment">
+          <set>Qt::AlignCenter</set>
+         </property>
+         <property name="placeholderText">
+          <string>1e7</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
      </item>
      <item alignment="Qt::AlignHCenter|Qt::AlignBottom">
       <widget class="QPushButton" name="okBtn">
@@ -155,12 +209,15 @@ border-color:black;
  </widget>
  <customwidgets>
   <customwidget>
-   <class>TeXtLabel</class>
+   <class>TeXLabel</class>
    <extends>QWidget</extends>
-   <header>TeXtLabel.h</header>
+   <header>src.ui.widgets.TeXLabel</header>
    <container>1</container>
   </customwidget>
  </customwidgets>
  <resources/>
  <connections/>
+ <buttongroups>
+  <buttongroup name="freqTypeGroup"/>
+ </buttongroups>
 </ui>

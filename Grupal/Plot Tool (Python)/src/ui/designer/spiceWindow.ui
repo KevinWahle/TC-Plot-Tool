@@ -98,7 +98,7 @@
           </property>
           <property name="icon">
            <iconset>
-            <normaloff>Grupal/fileBtn.png</normaloff>Grupal/fileBtn.png</iconset>
+            <normaloff>res/fileBtn.png</normaloff>res/fileBtn.png</iconset>
           </property>
           <property name="iconSize">
            <size>
