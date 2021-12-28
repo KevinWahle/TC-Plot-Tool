@@ -124,7 +124,7 @@
      <item>
       <layout class="QHBoxLayout" name="horizontalLayout_4">
        <item>
-        <widget class="QRadioButton" name="freqLinRbtn">
+        <widget class="QRadioButton" name="scaleLinRbtn">
          <property name="text">
           <string>Lineal</string>
          </property>
@@ -134,7 +134,7 @@
         </widget>
        </item>
        <item>
-        <widget class="QRadioButton" name="freqLogRbtn">
+        <widget class="QRadioButton" name="scaleLogRbtn">
          <property name="text">
           <string>Logarítmica</string>
          </property>
@@ -154,7 +154,7 @@
         <enum>QLayout::SetDefaultConstraint</enum>
        </property>
        <item>
-        <widget class="QLineEdit" name="lineEdit_2">
+        <widget class="QLineEdit" name="freqMinT">
          <property name="alignment">
           <set>Qt::AlignCenter</set>
          </property>
@@ -164,7 +164,7 @@
         </widget>
        </item>
        <item>
-        <widget class="QLineEdit" name="lineEdit">
+        <widget class="QLineEdit" name="freqMaxT">
          <property name="alignment">
           <set>Qt::AlignCenter</set>
          </property>

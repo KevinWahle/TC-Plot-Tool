@@ -120,54 +120,54 @@ def getDataFromFile(path, modo):
     
     return signal
 
-def getTransfFunct(numList, denList):
-    num=[]
-    for index in range(len(numList)):
-        num.append(float(numList[index]))
+# def getTransfFunct(numList, denList):
+#     num=[]
+#     for index in range(len(numList)):
+#         num.append(float(numList[index]))
 
-    den=[]
-    for index in range(len(denList)):
-        den.append(float(denList[index]))
+#     den=[]
+#     for index in range(len(denList)):
+#         den.append(float(denList[index]))
 
-    H = ss.TransferFunction(num,den)
+#     H = ss.TransferFunction(num,den)
 
-    return H
+#     return H
 
-def simBode(H, signal):
-    signal={"frec":[], "amp":[], "phase":[], "time":[], "y":[]}
+# def simBode(H, signal):
+#     signal={"frec":[], "amp":[], "phase":[], "time":[], "y":[]}
 
-    frec=np.logspace(0, 7, num=int(1e4))               # Fijado de 1 Hz a 10 MHz
+#     frec=np.logspace(0, 7, num=int(1e4))               # Fijado de 1 Hz a 10 MHz
     
-    bode = ss.bode(H, w=2*np.pi*frec)                   # Calculamos el Bode
-    signal["frec"].append(frec)            
+#     bode = ss.bode(H, w=2*np.pi*frec)                   # Calculamos el Bode
+#     signal["frec"].append(frec)            
 
-    #for i in range(len(bode[1])):                       #Descomentar para transferencias no logaritmicas
-    #    bode[1][i]=10**(bode[1][i]/20)                  #Descomentar para transferencias no logaritmicas
+#     #for i in range(len(bode[1])):                       #Descomentar para transferencias no logaritmicas
+#     #    bode[1][i]=10**(bode[1][i]/20)                  #Descomentar para transferencias no logaritmicas
     
-    signal["amp"].append(bode[1])                       # Guardamos el Bode
+#     signal["amp"].append(bode[1])                       # Guardamos el Bode
     
-    # aux=[]
-    # for elem in bode[2]:
-    #     #Limitamos el rango de la fase entre -180 y 180
-    #     if elem > 180:
-    #         aux.append(elem - 360)
-    #     elif elem < -180:
-    #         aux.append(elem + 360)
-    #     else:
-    #         aux.append(elem)
+#     # aux=[]
+#     # for elem in bode[2]:
+#     #     #Limitamos el rango de la fase entre -180 y 180
+#     #     if elem > 180:
+#     #         aux.append(elem - 360)
+#     #     elif elem < -180:
+#     #         aux.append(elem + 360)
+#     #     else:
+#     #         aux.append(elem)
 
-    phase = bode[2]
+#     phase = bode[2]
 
-    phase[phase > 180] -= 360
-    phase[phase < -180] += 360
+#     phase[phase > 180] -= 360
+#     phase[phase < -180] += 360
 
-    signal["phase"].append(phase)
+#     signal["phase"].append(phase)
 
-    return signal
+#     return signal
 
-def getDataTeorica(H):
-    # Calculamos el Bode y lo appendeamos al dict
-    signal={"frec":[], "amp":[], "phase":[], "time":[], "y":[]}
-    signal = simBode(H, signal) 
+# def getDataTeorica(H):
+#     # Calculamos el Bode y lo appendeamos al dict
+#     signal={"frec":[], "amp":[], "phase":[], "time":[], "y":[]}
+#     signal = simBode(H, signal) 
 
-    return signal
+#     return signal

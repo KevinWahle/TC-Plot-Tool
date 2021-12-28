@@ -27,6 +27,8 @@ class H_Window(QtWidgets.QDialog, H_Window_design):
 
         self.numeradorT.setValidator(regexVal)
         self.denominadorT.setValidator(regexVal)
+        self.freqMinT.setValidator(regexVal)
+        self.freqMaxT.setValidator(regexVal)
 
         self.numeradorT.textChanged.connect(self.updateTF)
         self.denominadorT.textChanged.connect(self.updateTF)
@@ -40,6 +42,8 @@ class H_Window(QtWidgets.QDialog, H_Window_design):
         self.name = ''      # Nombre de la curva
         self.numArr = []    # Arreglo de coeficientes del numerador
         self.denArr = []    # Arreglo de coeficientes del denominador
+        self.freqRange = [float(self.freqMinT.placeholderText()), float(self.freqMaxT.placeholderText())] # Rango de frecuencias
+        self.logscale = self.scaleLogRbtn.isChecked()   # Tipo de escala
 
 
     def okBtnClick(self):
@@ -48,8 +52,25 @@ class H_Window(QtWidgets.QDialog, H_Window_design):
         self.removeLeadingZeros(self.numArr)
         self.removeLeadingZeros(self.denArr)
 
+        self.logscale = self.scaleLogRbtn.isChecked()
+        
+        if not self.freqMinT.text():                                       # No hay nada, tomo el hint
+            self.freqRange[0] = float(self.freqMinT.placeholderText())
+        elif self.freqMinT.hasAcceptableInput():                       # Entrada valida, tomo el valor
+            self.freqRange[0] = float(self.freqMinT.text())
+        else:                                                          # Entrada invalida, no hago nada
+            return
+        
+        if not self.freqMaxT.text():                                       # No hay nada, tomo el hint
+            self.freqRange[1] = float(self.freqMaxT.placeholderText())
+        elif self.freqMaxT.hasAcceptableInput():                       # Entrada valida, tomo el valor
+            self.freqRange[1] = float(self.freqMaxT.text())
+        else:                                                          # Entrada invalida, no hago nada
+            return
+
         if self.name and self.numeradorT.hasAcceptableInput() and self.denominadorT.hasAcceptableInput() and self.tfOk \
-        and self.numArr and self.denArr: # and len(self.denArr) >= len(self.numArr):   # H valida
+        and self.numArr and self.denArr:            # H valida
+        # and len(self.denArr) >= len(self.numArr): # H causal
             self.accept()
 
 

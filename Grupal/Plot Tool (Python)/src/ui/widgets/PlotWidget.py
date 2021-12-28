@@ -57,6 +57,8 @@ class PlotWidget(QWidget):
 
     # Para dibujar directamente
     def draw(self):
+        self.axes.relim(visible_only=True)  # autoscale solo a los objetos visibles
+        self.axes.autoscale()
         self.canvas.draw()
         # self.canvas.figure.tight_layout()
 
