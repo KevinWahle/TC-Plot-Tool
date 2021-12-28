@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file '.\src\ui\designer\mainWindow2.ui'
+# Form implementation generated from reading ui file 'src\ui\designer\mainWindow2.ui'
 #
 # Created by: PyQt5 UI code generator 5.15.6
 #
@@ -132,17 +132,17 @@ class MainWindow_design(object):
         self.verticalLayout_7.addWidget(self.horizontalWidget_9)
         self.horizontalLayout_5 = QtWidgets.QHBoxLayout()
         self.horizontalLayout_5.setObjectName("horizontalLayout_5")
-        self.radioButton = QtWidgets.QRadioButton(self.horizontalWidget)
-        self.radioButton.setObjectName("radioButton")
+        self.freqLinRbtn = QtWidgets.QRadioButton(self.horizontalWidget)
+        self.freqLinRbtn.setObjectName("freqLinRbtn")
         self.freqTypeGroup = QtWidgets.QButtonGroup(MainWindow)
         self.freqTypeGroup.setObjectName("freqTypeGroup")
-        self.freqTypeGroup.addButton(self.radioButton)
-        self.horizontalLayout_5.addWidget(self.radioButton)
-        self.freqLinRbtn = QtWidgets.QRadioButton(self.horizontalWidget)
-        self.freqLinRbtn.setChecked(True)
-        self.freqLinRbtn.setObjectName("freqLinRbtn")
         self.freqTypeGroup.addButton(self.freqLinRbtn)
         self.horizontalLayout_5.addWidget(self.freqLinRbtn)
+        self.freqLogRbtn = QtWidgets.QRadioButton(self.horizontalWidget)
+        self.freqLogRbtn.setChecked(True)
+        self.freqLogRbtn.setObjectName("freqLogRbtn")
+        self.freqTypeGroup.addButton(self.freqLogRbtn)
+        self.horizontalLayout_5.addWidget(self.freqLogRbtn)
         self.verticalLayout_7.addLayout(self.horizontalLayout_5)
         self.horizontalLayout.addLayout(self.verticalLayout_7)
         self.horizontalLayout_2 = QtWidgets.QHBoxLayout()
@@ -272,7 +272,7 @@ class MainWindow_design(object):
         self.delBtn1.setMaximumSize(QtCore.QSize(30, 16777215))
         self.delBtn1.setText("")
         icon = QtGui.QIcon()
-        icon.addPixmap(QtGui.QPixmap(".\\src\\ui\\designer\\../../../res/DeleteBtn.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon.addPixmap(QtGui.QPixmap("src\\ui\\designer\\../../../res/DeleteBtn.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.delBtn1.setIcon(icon)
         self.delBtn1.setIconSize(QtCore.QSize(30, 30))
         self.delBtn1.setCheckable(False)
@@ -425,8 +425,8 @@ class MainWindow_design(object):
         self.checkRespuesta.setText(_translate("MainWindow", "Respuesta"))
         self.radioButtonF.setText(_translate("MainWindow", "Frecuencia [Hz]"))
         self.radioButtonW.setText(_translate("MainWindow", "Frecuencia Angular [rad/s]"))
-        self.radioButton.setText(_translate("MainWindow", "Lineal"))
-        self.freqLinRbtn.setText(_translate("MainWindow", "Logarítmico"))
+        self.freqLinRbtn.setText(_translate("MainWindow", "Lineal"))
+        self.freqLogRbtn.setText(_translate("MainWindow", "Logarítmico"))
         self.btnH.setText(_translate("MainWindow", "H (s)"))
         self.btnFiles.setText(_translate("MainWindow", "SPICE/\n"
 "MEDICIONES"))

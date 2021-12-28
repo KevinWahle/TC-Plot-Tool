@@ -5,6 +5,7 @@ from src.ui.widgets.FromFile_Window import FromFile_Window
 from src.ui.widgets.H_Window import H_Window
 from src.ui.widgets.Respuesta_Window import Respuesta_Window
 
+from src.NewCurve import FileCurve, TFCurve
 from src.Curve import Curve, graphCurves
 from src.Excitation import Excitation
 from src.fileReader import *
@@ -21,7 +22,10 @@ class PlotToolApp(QMainWindow, MainWindow_design):
         self.checkFase.stateChanged.connect(lambda state: self.horizontalWidget_6.setVisible(state))    # Grafico de Fase
         self.checkRespuesta.stateChanged.connect(lambda state: self.verticalWidget_6.setVisible(state)) # Grafico de Respuesta
 
-        self.buttonGroup.buttonClicked.connect(self.updateGraphs)   # Cambio de escala de frecuencia
+        # Cambio de unidad (rad/s - Hz)
+        self.buttonGroup.buttonClicked.connect(self.updateGraphs)
+        # Cambio de escala (lineal - logaritmica)
+        self.freqTypeGroup.buttonClicked.connect(self.updateGraphs)
 
         # self.listWidget.setMovement(QListView.Free)
         # self.listWidget.setDefaultDropAction(QtCore.Qt.MoveAction)
@@ -94,8 +98,10 @@ class PlotToolApp(QMainWindow, MainWindow_design):
         self.widgetFase.clear()
         self.widgetRespuesta.clear()
 
-        self.widgetModulo.axes.set_xscale('log') 
-        self.widgetFase.axes.set_xscale('log') 
+        
+        xscale = 'log' if self.freqLogRbtn.isChecked() else 'linear'
+        self.widgetModulo.axes.set_xscale(xscale) 
+        self.widgetFase.axes.set_xscale(xscale)
 
         axes = [self.widgetModulo.axes, self.widgetFase.axes, self.widgetRespuesta.axes]
         graphCurves(curves=self.curves, axes=axes, exitaciones = self.excits, frec=self.radioButtonW.isChecked())
@@ -127,6 +133,7 @@ class PlotToolApp(QMainWindow, MainWindow_design):
                 if(transFuncW.exec()):   # Vuelve sin error
                     # print(transFuncW.name, transFuncW.numArr, transFuncW.denArr)
                     Hcurve = Curve(nombre=transFuncW.name, Hnum=transFuncW.numArr, Hden=transFuncW.denArr)
+                    # Hcurve = TFCurve(name=transFuncW.name, Hnum=transFuncW.numArr, Hden=transFuncW.denArr, freqRange=transFuncW.freqRange)
                     self.addCurve(Hcurve)
                 break
             except Exception as e:
@@ -141,6 +148,7 @@ class PlotToolApp(QMainWindow, MainWindow_design):
                 if(fileW.exec()):   # Vuelve sin error
                     # print(fileW.name, fileW.path, fileW.type)
                     fileCurve = Curve(nombre=fileW.name, path=fileW.path, modo=fileW.type)
+                    # fileCurve = FileCurve(name=fileW.name, path=fileW.path, mode=fileW.type)
                     self.addCurve(fileCurve)
                 break
             except Exception as e:

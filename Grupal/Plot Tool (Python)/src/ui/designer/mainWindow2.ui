@@ -229,7 +229,7 @@
            <item>
             <layout class="QHBoxLayout" name="horizontalLayout_5">
              <item>
-              <widget class="QRadioButton" name="radioButton">
+              <widget class="QRadioButton" name="freqLinRbtn">
                <property name="text">
                 <string>Lineal</string>
                </property>
@@ -239,7 +239,7 @@
               </widget>
              </item>
              <item>
-              <widget class="QRadioButton" name="freqLinRbtn">
+              <widget class="QRadioButton" name="freqLogRbtn">
                <property name="text">
                 <string>Logarítmico</string>
                </property>
