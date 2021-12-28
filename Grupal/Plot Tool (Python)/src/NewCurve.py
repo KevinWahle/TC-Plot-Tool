@@ -1,4 +1,3 @@
-from matplotlib.lines import Line2D
 import numpy as np
 import scipy.signal as ss
 
@@ -6,7 +5,7 @@ from src.fileReader import getDataFromFile
 
 class Curve:
 
-    def __init__(self, name: str, visibility=True):
+    def __init__(self, name: str, axes, visibility=True):   # axes = [ Magnitude, Phase, Time ]
         self.name = name
         self.visibility = visibility
 
@@ -15,10 +14,6 @@ class Curve:
 
     def setVisible(self, visibility=True):
         self.visibility = visibility
-
-    #Link curve with axes
-    def link(self, axes):   # axes = [ Magnitude, Phase, Time ]
-        pass
     
     def delete(self):
         pass
@@ -32,8 +27,8 @@ class Curve:
 # Curva a partir de función transferencia
 class TFCurve(Curve):
 
-    def __init__(self, name: str, Hnum: list[float], Hden: list[float], freqRange: list[float], logscale: bool, visibility=True):
-        super().__init__(name, visibility=visibility)
+    def __init__(self, name: str, Hnum: list[float], Hden: list[float], freqRange: list[float], logscale: bool, axes, visibility=True):
+        super().__init__(name, axes, visibility=visibility)
         self.H = ss.TransferFunction(Hnum, Hden)
         self.plot = [None, None, []]    # [ Magnitude, Phase, [resp1, resp2, ...] ]
 
@@ -49,14 +44,15 @@ class TFCurve(Curve):
         else:
             _, h = ss.freqresp(self.H, w=2*np.pi*frec)
             mag = abs(h)
-            phase = np.angle(h)
+            phase = np.angle(h, deg=True)
 
         # Fase limitada entre -180 y 180
         phase[phase > 180] -= 360
         phase[phase < -180] += 360
 
-        self.plot[0] = Line2D(frec, mag, label=self.name)
-        self.plot[1] = Line2D(frec, phase, label=self.name)
+        # Guarda las curvas linkeadas al eje
+        self.plot[0] = axes[0].plot(frec, mag, label=self.name)[0]
+        self.plot[1] = axes[1].plot(frec, phase, label=self.name)[0]
 
     def addResponse(self, excitation, timeAxis):
         
@@ -105,11 +101,6 @@ class TFCurve(Curve):
                 # else:
                 #     plot.remove()
 
-    def link(self, axes):   # axes = [ Magnitude, Phase, Time ]
-        axes[0].add_line(self.plot[0])
-        axes[1].add_line(self.plot[1])
-        # TODO: Linekear aca o en el constructor?
-
     def delete(self):
         for plot in self.plot[0:2]+self.plot[2]:   #TODO: Revisar si funciona esa concatenacion
             if plot is not None:
@@ -118,8 +109,8 @@ class TFCurve(Curve):
 # Curva a partir de archhivo (.txt o .csv)
 class FileCurve(Curve):
 
-    def __init__(self, name: str, path: str, mode: int, visibility=True):
-        super().__init__(name, visibility=visibility)
+    def __init__(self, name: str, path: str, mode: int, axes, visibility=True):
+        super().__init__(name, axes, visibility=visibility)
         self.plot = [None, None, None]    # [ Magnitude, Phase, time ]
         self.mode = mode
         self.data = getDataFromFile(path, mode)
@@ -129,15 +120,15 @@ class FileCurve(Curve):
             if len(self.data["frec"]) > 1:
                 freq = self.data["frec"]
 
-                mag = Line2D(freq, self.data["amp"], label=name)
-                phase = Line2D(freq, self.data["phase"], label=name)
+                mag = axes[0].plot(freq, self.data["amp"], label=name)[0]
+                phase = axes[1].plot(freq, self.data["phase"], label=name)[0]
                 self.plot = [mag, phase, None]
             else:
                 #TODO: Ver caso MonteCarlo
                 pass
 
         else:   # En el tiempo
-            time = Line2D(self.data["time"], self.data["y"], label=name)
+            time = axes[2].plot(self.data["time"], self.data["y"], label=name)[0]
             self.plot = [None, None, time]
 
     def setName(self, name):
@@ -151,14 +142,6 @@ class FileCurve(Curve):
         for plot in self.plot:
             if plot is not None:
                 plot.set_visible(self.visibility)
-
-    def link(self, axes):   # axes = [ Magnitude, Phase, Time ]
-        if self.visibility:
-            if self.mode == 0:
-                axes[0].add_line(self.plot[0])
-                axes[1].add_line(self.plot[1])
-            else:            
-                axes[2].add_line(self.plot[2])
 
     def delete(self):
         for plot in self.plot:

@@ -105,10 +105,6 @@ class PlotToolApp(QMainWindow, MainWindow_design):
         item.setCheckState(QtCore.Qt.Checked if curve.visibility else QtCore.Qt.Unchecked)
         self.listWidget.addItem(item)
 
-        # Link new curve
-        axes = [self.widgetModulo.axes, self.widgetFase.axes, self.widgetRespuesta.axes]
-        curve.link(axes)
-
         # Redraw curves
         self.updateGraphs()
 
@@ -168,22 +164,27 @@ class PlotToolApp(QMainWindow, MainWindow_design):
 
         # Solo mostrar los legends si hay una curva visible
         anyCurve = any(curve.visibility for curve in self.curves)
+        
+        # TODO: Ver de reemplazar los anyCurve con una funcion que devuelva los labels o las curvas
+        # para no mostrar los legends de las ocultas y poder ver las que empiezan con '_'
+        # Referencia: https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.legend.html (3)
 
-        if anyLegend:           # Ya existe el legend
-            self.axes[0].get_legend().set_visible(anyCurve)
-            self.axes[1].get_legend().set_visible(anyCurve)
-        elif anyCurve:           # No existe el legend y hay algo para mostrar
+        if anyCurve:           # Actualiza legend si hay algo para mostrar (para evitar warning)
             self.axes[0].legend()
             self.axes[1].legend()
+
+        if anyLegend:           # Si hay legend, actualizo visibilidad
+            self.axes[0].get_legend().set_visible(anyCurve)
+            self.axes[1].get_legend().set_visible(anyCurve)
 
         # Graficos de tiempo
 
         timeLegend = self.axes[2].get_legend()
         anyExcit = any(excit.visibility for excit in self.excits)
-        if timeLegend:      # Ya existe el legend
-            self.axes[2].get_legend().set_visible(anyExcit)
-        elif anyExcit:      # No existe el legend y hay algo para mostrar
+        if anyExcit:
             self.axes[2].legend()
+        if timeLegend:
+            self.axes[2].get_legend().set_visible(anyExcit)
 
         
     # TODO: Graficar excitaciones
@@ -210,7 +211,7 @@ class PlotToolApp(QMainWindow, MainWindow_design):
                     # print(transFuncW.name, transFuncW.numArr, transFuncW.denArr)
                     # Hcurve = Curve(nombre=transFuncW.name, Hnum=transFuncW.numArr, Hden=transFuncW.denArr)
                     Hcurve = TFCurve(name=transFuncW.name, Hnum=transFuncW.numArr, Hden=transFuncW.denArr,
-                                    freqRange=transFuncW.freqRange, logscale=transFuncW.logscale)
+                                    freqRange=transFuncW.freqRange, logscale=transFuncW.logscale, axes=self.axes)
                     self.addCurve(Hcurve)
                 break
             except Exception as e:
