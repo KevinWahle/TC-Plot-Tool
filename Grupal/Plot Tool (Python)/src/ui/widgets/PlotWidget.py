@@ -64,8 +64,8 @@ class PlotWidget(QWidget):
 
     # Borra los ejes
     def clear(self):
-        # self.labelEdit.x_input.setText('')
-        # self.labelEdit.y_input.setText('')
+        self.labelEdit.x_input.setText('')
+        self.labelEdit.y_input.setText('')
         self.axes.clear()
         self.canvas.draw()
         # self.canvas.figure.tight_layout()
@@ -135,7 +135,7 @@ class PlotWidget(QWidget):
 
     def _onclick(self, event):
         #print('button=%d, x=%d, y=%d, xdata=%f, ydata=%f' %(event.button, event.x, event.y, event.xdata, event.ydata))
-        if event.button == 2:
+        if event.button == 2:   # Click con la ruedita del mouse
             self.axes.plot(event.xdata, event.ydata, '.', markersize=15, zorder=3)
             self.canvas.draw()
 

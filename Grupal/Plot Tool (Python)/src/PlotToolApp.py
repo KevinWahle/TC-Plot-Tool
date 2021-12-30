@@ -5,10 +5,7 @@ from src.ui.widgets.FromFile_Window import FromFile_Window
 from src.ui.widgets.H_Window import H_Window
 from src.ui.widgets.Respuesta_Window import Respuesta_Window
 
-from src.NewCurve import FileCurve, TFCurve
-from src.Curve import Curve, graphCurves
-from src.Excitation import Excitation
-from src.fileReader import *
+from src.NewCurve import ExcitCurve, FileCurve, TFCurve
 
 class PlotToolApp(QMainWindow, MainWindow_design):
     def __init__(self, *args, **kwargs):
@@ -57,73 +54,12 @@ class PlotToolApp(QMainWindow, MainWindow_design):
         self.curves = []
         self.excits = []
 
+        self.units = self.getUnits()
+
         self.initGraphs()
 
-    def toggleItem(self, item):
-        item.setCheckState(QtCore.Qt.Checked if item.checkState() != QtCore.Qt.Checked else QtCore.Qt.Unchecked)
-
-    # def curveItemChanged(self, item):
-    #     index = self.listWidget.row(item)
-        
-    #     # Cambio el nombre o la visibilidad, actualizo las curvas
-    #     self.curves[index].nombre = item.text()
-    #     self.curves[index].visibility = item.checkState() == QtCore.Qt.Checked
-    #     self.updateGraphs()
-
-    def curveItemChanged(self, item):
-        index = self.listWidget.row(item)
-        
-        # Cambio el nombre o la visibilidad, actualizo las curvas
-        self.curves[index].setName(item.text())
-        self.curves[index].setVisible(item.checkState() == QtCore.Qt.Checked)
-        self.updateGraphs()
-
-    def excitItemChanged(self, item):
-        index = self.listWidget2.row(item)
-        
-        # Cambio el nombre o la visibilidad, actualizo las curvas
-        self.excits[index].name = item.text()
-        self.excits[index].visibility = item.checkState() == QtCore.Qt.Checked
-        self.updateGraphs()
-
-    # def updateCurvesList(self):
-    #     # Update curves list
-    #     self.listWidget.clear()
-    #     for curve in self.cuves:
-    #         item = QListWidgetItem(text=curve.name)
-    #         item.setFlags(QtCore.Qt.ItemIsSelectable|QtCore.Qt.ItemIsEditable|QtCore.Qt.ItemIsUserCheckable|QtCore.Qt.ItemIsEnabled)
-    #         item.setCheckState(QtCore.Qt.Checked if curve.visibility else QtCore.Qt.Unchecked)
-    #         self.listWidget.addItem(item)
-
-    def addCurve(self, curve):
-        # Add to curve array
-        self.curves.append(curve)
-
-        # Add to curve list
-        item = QListWidgetItem(curve.name)
-        item.setFlags(QtCore.Qt.ItemIsSelectable|QtCore.Qt.ItemIsEditable|QtCore.Qt.ItemIsUserCheckable|QtCore.Qt.ItemIsEnabled)
-        item.setCheckState(QtCore.Qt.Checked if curve.visibility else QtCore.Qt.Unchecked)
-        self.listWidget.addItem(item)
-
-        # Redraw curves
-        self.updateGraphs()
-
-    # def updateGraphs(self):
-    #     self.widgetModulo.clear()
-    #     self.widgetFase.clear()
-    #     self.widgetRespuesta.clear()
-
-        
-    #     xscale = 'log' if self.freqLogRbtn.isChecked() else 'linear'
-    #     self.widgetModulo.axes.set_xscale(xscale) 
-    #     self.widgetFase.axes.set_xscale(xscale)
-
-    #     axes = [self.widgetModulo.axes, self.widgetFase.axes, self.widgetRespuesta.axes]
-    #     graphCurves(curves=self.curves, axes=axes, exitaciones = self.excits, frec=self.radioButtonW.isChecked())
-
-    #     self.widgetModulo.draw()
-    #     self.widgetFase.draw()
-    #     self.widgetRespuesta.draw()
+    def getUnits(self):
+        return 'Hz' if self.radioButtonF.isChecked() else 'rads'
 
     def initGraphs(self):
 
@@ -142,18 +78,26 @@ class PlotToolApp(QMainWindow, MainWindow_design):
 
         self.updateGraphsXScale()
 
+        self.updateGraphsXUnits()
+
         self.updateGraphsLegends()
 
         self.widgetModulo.draw()
         self.widgetFase.draw()
         self.widgetRespuesta.draw()
 
-
+    
     def updateGraphsXScale(self):
         xscale = 'log' if self.freqLogRbtn.isChecked() else 'linear'
         self.axes[0].set_xscale(xscale) 
         self.axes[1].set_xscale(xscale)
         self.axes[2].set_xscale('linear')
+
+    def updateGraphsXUnits(self):
+        self.units = self.getUnits()
+
+        for curve in self.curves:
+            curve.setXUnits(self.units)
 
     def updateGraphsLegends(self):
 
@@ -186,21 +130,34 @@ class PlotToolApp(QMainWindow, MainWindow_design):
         if timeLegend:
             self.axes[2].get_legend().set_visible(anyExcit)
 
+
+    # def toggleItem(self, item):
+    #     item.setCheckState(QtCore.Qt.Checked if item.checkState() != QtCore.Qt.Checked else QtCore.Qt.Unchecked)
+
+
+    def curveItemChanged(self, item):
+        index = self.listWidget.row(item)
         
-    # TODO: Graficar excitaciones
-    # def addExcitation(self, excit):
-    #     # Add to Excitaction array
-    #     self.excits.append(excit)
+        # Cambio el nombre o la visibilidad, actualizo las curvas
+        self.curves[index].setName(item.text())
+        self.curves[index].setVisible(item.checkState() == QtCore.Qt.Checked)
+        self.updateGraphs()
 
-    #     # Add to excitation list
-    #     item = QListWidgetItem(excit.name)
-    #     item.setFlags(QtCore.Qt.ItemIsSelectable|QtCore.Qt.ItemIsEditable|QtCore.Qt.ItemIsUserCheckable|QtCore.Qt.ItemIsEnabled)
-    #     item.setCheckState(QtCore.Qt.Checked if excit.visibility else QtCore.Qt.Unchecked)
-    #     self.listWidget2.addItem(item)
-
-    #     # Redraw response
+    # def excitItemChanged(self, item):
+    #     index = self.listWidget2.row(item)
+        
+    #     # Cambio el nombre o la visibilidad, actualizo las curvas
+    #     self.excits[index].name = item.text()
+    #     self.excits[index].visibility = item.checkState() == QtCore.Qt.Checked
     #     self.updateGraphs()
+
+    def excitItemChanged(self, item):
+        index = self.listWidget2.row(item)
         
+        # Cambio el nombre o la visibilidad, actualizo las curvas
+        self.excits[index].setName(item.text())
+        self.excits[index].setVisible(item.checkState() == QtCore.Qt.Checked)
+        self.updateGraphs()
 
     def openHWindow(self):        
         while(True):
@@ -210,8 +167,9 @@ class PlotToolApp(QMainWindow, MainWindow_design):
                 if(transFuncW.exec()):   # Vuelve sin error
                     # print(transFuncW.name, transFuncW.numArr, transFuncW.denArr)
                     # Hcurve = Curve(nombre=transFuncW.name, Hnum=transFuncW.numArr, Hden=transFuncW.denArr)
-                    Hcurve = TFCurve(name=transFuncW.name, Hnum=transFuncW.numArr, Hden=transFuncW.denArr,
-                                    freqRange=transFuncW.freqRange, logscale=transFuncW.logscale, axes=self.axes)
+                    Hcurve = TFCurve(name=transFuncW.name, Hnum=transFuncW.numArr, Hden=transFuncW.denArr,      \
+                                    freqRange=transFuncW.freqRange, logscale=transFuncW.logscale, axes=self.axes, \
+                                    plotUnits=self.units)
                     self.addCurve(Hcurve)
                 break
             except Exception as e:
@@ -234,17 +192,51 @@ class PlotToolApp(QMainWindow, MainWindow_design):
 
     def openRespWindow(self):
         while(True):
-            try:
+            # try:
                 # Abrimos la ventana de generacion de la excitacion
                 respW = Respuesta_Window()
                 if(respW.exec()):   # Vuelve sin error
                     # print(respW.name, respW.type, respW.amp, respW.freq, respW.freqType, resp.duty)
-                    excit = Excitation(name=respW.name, type=respW.type, amp=respW.amp, freq=respW.freq,    \
+                    # excit = Excitation(name=respW.name, type=respW.type, amp=respW.amp, freq=respW.freq,    \
+                    #                     freqType=respW.freqType, duty=respW.duty, path=respW.path)
+                    excit = ExcitCurve(name=respW.name, axes=self.axes, type=respW.type, amp=respW.amp, freq=respW.freq,    \
                                         freqType=respW.freqType, duty=respW.duty, path=respW.path)
                     self.addExcitation(excit)
                 break
-            except Exception as e:
-                print(e)
+            # except Exception as e:
+            #     print(e)
+
+    def addCurve(self, curve):
+        # Add to curve array
+        self.curves.append(curve)
+
+        # Add to curve list
+        item = QListWidgetItem(curve.name)
+        item.setFlags(QtCore.Qt.ItemIsSelectable|QtCore.Qt.ItemIsEditable|QtCore.Qt.ItemIsUserCheckable|QtCore.Qt.ItemIsEnabled)
+        item.setCheckState(QtCore.Qt.Checked if curve.visibility else QtCore.Qt.Unchecked)
+        self.listWidget.addItem(item)
+
+        # Redraw curves
+        self.updateGraphs()
+
+
+    def addExcitation(self, excit):
+        # Add to Excitaction array
+        self.excits.append(excit)
+
+        for curve in self.curves:
+            if isinstance(curve, TFCurve):  # Solo si es una curva de transferencia
+                curve.addResponse(excit, self.axes)
+
+        # Add to excitation list
+        item = QListWidgetItem(excit.name)
+        item.setFlags(QtCore.Qt.ItemIsSelectable|QtCore.Qt.ItemIsEditable|QtCore.Qt.ItemIsUserCheckable|QtCore.Qt.ItemIsEnabled)
+        item.setCheckState(QtCore.Qt.Checked if excit.visibility else QtCore.Qt.Unchecked)
+        self.listWidget2.addItem(item)
+
+        # Redraw response
+        self.updateGraphs()
+
 
     def removeCurrentCurve(self):
         index = self.listWidget.currentRow()
@@ -262,8 +254,15 @@ class PlotToolApp(QMainWindow, MainWindow_design):
             self.updateGraphs()
 
     def clearAll(self):
-        self.curves = []
-        self.excits = []
+
+        for curve in self.curves:
+            curve.delete()
+
+        for excit in self.excits:
+            excit.delete()
+
+        self.curves.clear()
+        self.excits.clear()
         self.clearFigs()
 
     def clearFigs(self):
