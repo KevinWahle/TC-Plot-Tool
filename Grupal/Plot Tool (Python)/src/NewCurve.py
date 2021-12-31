@@ -272,6 +272,6 @@ if __name__ == '__main__':
     fig = plt.figure()
     ax = fig.add_subplot()
 
-    ExcitCurve("Seno", [None, None, ax], 4, path='D:\Electronica\Fisica Electronica 2021\TP FE - Dispositivos\BJT\BJT_PS_5_10_15mV.txt')
+    ExcitCurve("Seno", [None, None, ax], 0, amp=1, freq=1e3, freqType='W', duty=0.5, path='', duration=10e-3)
 
     plt.show()

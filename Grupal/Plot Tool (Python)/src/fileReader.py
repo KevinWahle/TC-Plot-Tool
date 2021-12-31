@@ -1,6 +1,4 @@
 import numpy as np
-import pandas as pd
-import scipy.signal as ss
 
 def appendCurve(toAppend, appended, modo):
 
@@ -95,20 +93,31 @@ def getDataSimulation(path, modo):
     return signal    
 
 def getDataMediciones(path, modo):
-    data = (pd.read_csv(path)).to_numpy()       # Pasamos de .csv a matriz 
-    signal={"frec":[], "amp":[], "phase":[], "time":[], "y":[]}
-    aux={"frec":[], "amp":[], "phase":[], "time":[], "y":[]}  # Diccionario aux para manipular los datos.
+    data = np.loadtxt(path, delimiter=',', skiprows=1)       # Pasamos de .csv a matriz 
+    # data = (pd.read_csv(path)).to_numpy()       # Pasamos de .csv a matriz 
 
-    filas= (data.shape)[0]
-    for index in range(filas):
-        if modo == 0:
-            aux["frec"].append(data[index][0])      # Para cada columna, appendeo TODOS los datos de cada una 
-            aux["amp"].append(data[index][1])       # de sus filas en un arreglo distinto. 
-            aux["phase"].append(data[index][2])
+    signal = {"frec":[], "amp":[], "phase":[], "time":[], "y":[]}
+    aux = {"frec":[], "amp":[], "phase":[], "time":[], "y":[]}  # Diccionario aux para manipular los datos.
 
-        elif modo == 1:
-            aux["time"].append(data[index][0])      # Para cada columna, appendeo TODOS los datos de cada una 
-            aux["y"].append(data[index][1])         # de sus filas en un arreglo distinto. 
+    if modo == 0:
+        aux["frec"] = data[:,0]      # Para cada columna, appendeo TODOS los datos de cada una 
+        aux["amp"] = data[:,1]       # de sus filas en un arreglo distinto. 
+        aux["phase"] = data[:,2]
+    elif modo == 1:
+        aux["time"] = data[:,0]      # Para cada columna, appendeo TODOS los datos de cada una 
+        aux["y"] = data[:,1]         # de sus filas en un arreglo distinto. 
+    
+    # filas = (data.shape)[0]
+
+    # for index in range(filas):
+    #     if modo == 0:
+    #         aux["frec"].append(data[index][0])      # Para cada columna, appendeo TODOS los datos de cada una 
+    #         aux["amp"].append(data[index][1])       # de sus filas en un arreglo distinto. 
+    #         aux["phase"].append(data[index][2])
+
+    #     elif modo == 1:
+    #         aux["time"].append(data[index][0])      # Para cada columna, appendeo TODOS los datos de cada una 
+    #         aux["y"].append(data[index][1])         # de sus filas en un arreglo distinto. 
 
     return appendCurve(signal, aux, modo)
 
@@ -171,3 +180,6 @@ def getDataFromFile(path, modo):
 #     signal = simBode(H, signal) 
 
 #     return signal
+
+if __name__ == '__main__':
+    pass
