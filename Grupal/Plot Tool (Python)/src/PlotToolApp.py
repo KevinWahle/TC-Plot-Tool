@@ -6,12 +6,17 @@ from src.ui.widgets.H_Window import H_Window
 from src.ui.widgets.Respuesta_Window import Respuesta_Window
 
 from src.NewCurve import ExcitCurve, FileCurve, TFCurve
+import pint
 
 class PlotToolApp(QMainWindow, MainWindow_design):
     def __init__(self, *args, **kwargs):
         # Inicializacion
         super().__init__(*args, **kwargs)
         self.setupUi(self)
+
+        # Inicializa unidades
+        self.ureg = pint.UnitRegistry()
+        self.ureg.setup_matplotlib(True)
 
         self.verticalWidget_6.setVisible(False)     # Grafico de Respuesta
 
@@ -54,12 +59,12 @@ class PlotToolApp(QMainWindow, MainWindow_design):
         self.curves = []
         self.excits = []
 
-        self.units = self.getUnits()
+        self.units = None
 
         self.initGraphs()
 
     def getUnits(self):
-        return 'Hz' if self.radioButtonF.isChecked() else 'rads'
+        return self.ureg.rps if self.radioButtonF.isChecked() else self.ureg('rad/s')
 
     def initGraphs(self):
 
@@ -96,8 +101,8 @@ class PlotToolApp(QMainWindow, MainWindow_design):
     def updateGraphsXUnits(self):
         self.units = self.getUnits()
 
-        for curve in self.curves:
-            curve.setXUnits(self.units)
+        self.axes[0].xaxis.set_units(self.units)
+        self.axes[1].xaxis.set_units(self.units)
 
     def updateGraphsLegends(self):
 
@@ -153,30 +158,30 @@ class PlotToolApp(QMainWindow, MainWindow_design):
 
     def openHWindow(self):        
         while(True):
-            try:
+            # try:
                 # Abrimos la ventana de seleccion de archivo
-                transFuncW = H_Window()
+                transFuncW = H_Window(ureg=self.ureg)
                 if(transFuncW.exec()):   # Vuelve sin error
                     # print(transFuncW.name, transFuncW.numArr, transFuncW.denArr)
                     # Hcurve = Curve(nombre=transFuncW.name, Hnum=transFuncW.numArr, Hden=transFuncW.denArr)
                     Hcurve = TFCurve(name=transFuncW.name, Hnum=transFuncW.numArr, Hden=transFuncW.denArr,      \
                                     freqRange=transFuncW.freqRange, logscale=transFuncW.logscale, axes=self.axes, \
-                                    plotUnits=self.units)
+                                    freqUnits=transFuncW.freqUnits)
                     self.addCurve(Hcurve)
                 break
-            except Exception as e:
-                print(e)
+            # except Exception as e:
+            #     print(e)
 
 
     def openFileWindow(self):
         while(True):
             # try:
                 # Abrimos la ventana de seleccion de archivo
-                fileW = FromFile_Window()
+                fileW = FromFile_Window(ureg=self.ureg)
                 if(fileW.exec()):   # Vuelve sin error
                     # print(fileW.name, fileW.path, fileW.type)
                     fileCurve = FileCurve(name=fileW.name, path=fileW.path, mode=fileW.type, axes=self.axes, \
-                                            freqUnits='Hz', plotUnits=self.units)
+                                            freqUnits=fileW.freqUnits)
                     self.addCurve(fileCurve)
                 break
             # except Exception as e:

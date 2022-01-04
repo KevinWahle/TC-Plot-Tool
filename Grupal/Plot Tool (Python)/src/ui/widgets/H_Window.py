@@ -16,7 +16,7 @@ from src.ui.widgets.H_Window_design import H_Window_design
 
 class H_Window(QtWidgets.QDialog, H_Window_design):
 
-    def __init__(self, *args, **kargs) -> None:
+    def __init__(self, ureg, *args, **kargs) -> None:
         super().__init__(*args, **kargs)
 
         self.setupUi(self)
@@ -43,6 +43,7 @@ class H_Window(QtWidgets.QDialog, H_Window_design):
         self.numArr = []    # Arreglo de coeficientes del numerador
         self.denArr = []    # Arreglo de coeficientes del denominador
         self.freqRange = [float(self.freqMinT.placeholderText()), float(self.freqMaxT.placeholderText())] # Rango de frecuencias
+        self.freqUnits = ureg.rps
         self.logscale = self.scaleLogRbtn.isChecked()   # Tipo de escala
 
 

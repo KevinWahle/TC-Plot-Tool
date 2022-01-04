@@ -18,9 +18,6 @@ class Curve:
     def setVisible(self, visibility=True):
         self.visibility = visibility
     
-    def setXUnits(self, units):
-        pass
-
     def delete(self):
         pass
     
@@ -32,27 +29,22 @@ class Curve:
 
 # Curva a partir de función transferencia
 # freqUnits: Unidad en la que se interpreta freqrange. (Hz/rads)
-# plotUnits: Unidad en la que se grafica la función. (Hz/rads)
 class TFCurve(Curve):
 
     def __init__(self, name: str, Hnum: list[float], Hden: list[float], freqRange: list[float], \
-                logscale: bool, axes, freqUnits='Hz', plotUnits='Hz', visibility=True):
+                logscale: bool, axes, freqUnits, visibility=True):
         super().__init__(name, axes, visibility=visibility)
         self.H = ss.TransferFunction(Hnum, Hden)
-        self.units = plotUnits
         self.plot = [None, None, []]    # [ Magnitude, Phase, [resp1, resp2, ...] ]
 
         # Creación de la curva
         start = np.log10(freqRange[0])
         end = np.log10(freqRange[1])
-        ppd = 1e4   # Puntos por decada
+        ppd = 1e3   # Puntos por decada
         num = int(np.ceil(end-start)*ppd)
-        frec = np.logspace(start, end, num=num)
-
-        if (freqUnits == 'Hz'):
-            w = 2*np.pi*frec
-        else:
-            w = frec
+        frec = np.logspace(start, end, num=num) * freqUnits
+        # Seteo de unidades
+        w = frec.to('rad/s').magnitude
 
         if logscale:
             _, mag, phase = ss.bode(self.H, w=w)
@@ -64,12 +56,6 @@ class TFCurve(Curve):
         # Fase limitada entre -180 y 180
         phase[phase > 180] -= 360
         phase[phase < -180] += 360
-
-        # Ajuste de unidades
-        if plotUnits == 'Hz':
-            frec = w/(2*np.pi)
-        else:
-            frec = w
 
         # Guarda las curvas linkeadas al eje
         self.plot[0], = axes[0].plot(frec, mag, label=self.name)
@@ -107,18 +93,6 @@ class TFCurve(Curve):
             if plot is not None:
                 plot.set_visible(self.visibility)
 
-    def setXUnits(self, units):
-        if units != self.units:
-            self.units = units
-            if units == 'Hz':
-                mux = 1/(2*np.pi)
-            elif units == 'rads':
-                mux = 2*np.pi
-            else:
-                raise ValueError("Units not supported")
-            self.plot[0].set_xdata(self.plot[0].get_xdata()*mux)
-            self.plot[1].set_xdata(self.plot[1].get_xdata()*mux)
-
     def delete(self):
         for plot in self.plot[0:2]+self.plot[2]:
             if plot is not None:
@@ -128,26 +102,24 @@ class TFCurve(Curve):
 # mode: 0  Frecuencia   |   Modulo      |   Fase
 #       1  Tiempo       |   Magnitud
 # freqUnits: Unidad en la que se interpreta el eje de la frecuencia. (Hz/rads)
-# plotUnits: Unidad en la que se grafica la función. (Hz/rads)
 class FileCurve(Curve):
 
-    def __init__(self, name: str, path: str, mode: int, axes, freqUnits='Hz', plotUnits='Hz', visibility=True):
+    def __init__(self, name: str, path: str, mode: int, axes, freqUnits, visibility=True):
         super().__init__(name, axes, visibility=visibility)
         self.plot = [None, None, None]    # [ Magnitude, Phase, time ]
-        self.units = plotUnits
         self.mode = mode
         self.data = getDataFromFile(path, mode)
 
-        if freqUnits == 'rads':
-            self.data['freq'] /= 2*np.pi    # Trabajamos siempre con Hz
 
         if mode == 0:   # En frecuencia
 
-            if len(self.data["frec"]) > 1:
+            if len(self.data['frec']) > 1:  # MonteCarlo
                 style = 'solid'
                 color = 'grey'
                 zorder = 1
-                #TODO: label
+                # TODO: Ver como soportar unidades
+                # ampSegments = [ list(zip(x*freqUnits, y)) for x,y in zip(self.data['frec'], self.data['amp']) ]
+                # phaseSegments = [ list(zip(x*freqUnits, y)) for x,y in zip(self.data['frec'], self.data['phase']) ]
                 ampSegments = [ list(zip(x, y)) for x,y in zip(self.data['frec'], self.data['amp']) ]
                 phaseSegments = [ list(zip(x, y)) for x,y in zip(self.data['frec'], self.data['phase']) ]
                 ampLines = LineCollection(ampSegments, colors=color, linestyles=style, zorder=zorder, label=self.name)
@@ -155,20 +127,25 @@ class FileCurve(Curve):
                 mag = axes[0].add_collection(ampLines)
                 phase = axes[1].add_collection(phaseLines)
 
-                self.plot = [mag, phase, None]
+            else:
+                freq = self.data["frec"][0] * freqUnits
+
+                mag, = axes[0].plot(freq, self.data["amp"][0], label=self.name)
+                phase, = axes[1].plot(freq, self.data["phase"][0], label=self.name)
+
+            self.plot = [mag, phase, None]	
 
         else:   # En el tiempo
 
-            if len(self.data['time']) > 1:
+            if len(self.data['time']) > 1:  # MonteCarlo
                 style = 'solid'
                 color = 'grey'
                 zorder = 1
-                #TODO: label
                 segments = [ list(zip(x, y)) for x,y in zip(self.data['time'], self.data['y']) ]
-                lines = LineCollection(segments, colors=color, linestyles=style, zorder=zorder)
+                lines = LineCollection(segments, colors=color, linestyles=style, zorder=zorder, label=self.name)
                 time = axes[2].add_collection(lines)
             else:
-                time, = axes[2].plot(self.data["time"][0], self.data["y"][0], label=name)
+                time, = axes[2].plot(self.data["time"][0], self.data["y"][0], label=self.name)
             
             self.plot = [None, None, time]
             
@@ -184,19 +161,6 @@ class FileCurve(Curve):
         for plot in self.plot:
             if plot is not None:
                 plot.set_visible(self.visibility)
-
-    def setXUnits(self, units):
-        if self.mode == 0 and units != self.units:
-            self.units = units
-            if units == 'Hz':
-                mux = 1/(2*np.pi)
-            elif units == 'rads':
-                mux = 2*np.pi
-            else:
-                raise ValueError("Units not supported")
-
-            # self.plot[0].set_xdata(self.plot[0].get_xdata()*mux)  #TODO: Ojo MonteCarlo. Ver opcion de units en los ejes
-            # self.plot[1].set_xdata(self.plot[1].get_xdata()*mux)
 
     def delete(self):
         for plot in self.plot:

@@ -17,7 +17,7 @@ from src.ui.widgets.FromFile_Window_design import FromFile_Window_design
 
 class FromFile_Window(QtWidgets.QDialog, FromFile_Window_design):
 
-    def __init__(self, *args, **kargs) -> None:
+    def __init__(self, ureg, *args, **kargs) -> None:
         super().__init__(*args, **kargs)
         self.setupUi(self)
 
@@ -28,6 +28,7 @@ class FromFile_Window(QtWidgets.QDialog, FromFile_Window_design):
         self.name = ''              # Nombre de la curva
         self.path = ''              # Path del archivo
         self.type = self.comboBox.currentIndex()    # Opcion seleccionada (fercuencia o tiempo)
+        self.freqUnits = ureg.rps
 
     def selectFile( self ):
         ''' Called when the user presses the Browse button
