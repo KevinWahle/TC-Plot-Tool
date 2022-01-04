@@ -65,13 +65,13 @@ def getDataFromMonteCarlo(rawData, modo):
 
         if ("Step" in rawData[index])  or index == last-1:
             if init == -1:      # Caso encuentro el Step de la primera Run
-                init = index+1  # Seteo solamente el init
+                init = index + 1  # Seteo solamente el init
             
             else:
                 fin = index                                 # Determinamos el último punto a medir
                 # Transformo los renglones en una curva y la appendeo a signal (arreglo de curvas) 
                 signal = appendCurve(signal, Data2Dict(rawData[init:fin], modo), modo)    
-                init = index+1                              # Movemos el Inicio al primer dato de la prox Run
+                init = index + 1                              # Movemos el Inicio al primer dato de la prox Run
 
     return signal
 

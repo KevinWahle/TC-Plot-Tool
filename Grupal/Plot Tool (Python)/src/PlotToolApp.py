@@ -143,14 +143,6 @@ class PlotToolApp(QMainWindow, MainWindow_design):
         self.curves[index].setVisible(item.checkState() == QtCore.Qt.Checked)
         self.updateGraphs()
 
-    # def excitItemChanged(self, item):
-    #     index = self.listWidget2.row(item)
-        
-    #     # Cambio el nombre o la visibilidad, actualizo las curvas
-    #     self.excits[index].name = item.text()
-    #     self.excits[index].visibility = item.checkState() == QtCore.Qt.Checked
-    #     self.updateGraphs()
-
     def excitItemChanged(self, item):
         index = self.listWidget2.row(item)
         
@@ -178,17 +170,17 @@ class PlotToolApp(QMainWindow, MainWindow_design):
 
     def openFileWindow(self):
         while(True):
-            try:
+            # try:
                 # Abrimos la ventana de seleccion de archivo
                 fileW = FromFile_Window()
                 if(fileW.exec()):   # Vuelve sin error
                     # print(fileW.name, fileW.path, fileW.type)
-                    # fileCurve = Curve(nombre=fileW.name, path=fileW.path, modo=fileW.type)
-                    fileCurve = FileCurve(name=fileW.name, path=fileW.path, mode=fileW.type)
+                    fileCurve = FileCurve(name=fileW.name, path=fileW.path, mode=fileW.type, axes=self.axes, \
+                                            freqUnits='Hz', plotUnits=self.units)
                     self.addCurve(fileCurve)
                 break
-            except Exception as e:
-                print(e)
+            # except Exception as e:
+            #     print(e)
 
     def openRespWindow(self):
         while(True):
@@ -197,8 +189,6 @@ class PlotToolApp(QMainWindow, MainWindow_design):
                 respW = Respuesta_Window()
                 if(respW.exec()):   # Vuelve sin error
                     # print(respW.name, respW.type, respW.amp, respW.freq, respW.freqType, resp.duty)
-                    # excit = Excitation(name=respW.name, type=respW.type, amp=respW.amp, freq=respW.freq,    \
-                    #                     freqType=respW.freqType, duty=respW.duty, path=respW.path)
                     excit = ExcitCurve(name=respW.name, axes=self.axes, type=respW.type, amp=respW.amp, freq=respW.freq,    \
                                         freqType=respW.freqType, duty=respW.duty, path=respW.path)
                     self.addExcitation(excit)

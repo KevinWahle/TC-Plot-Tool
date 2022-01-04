@@ -1,4 +1,5 @@
 from matplotlib import pyplot as plt
+from matplotlib.collections import LineCollection
 import numpy as np
 import scipy.signal as ss
 
@@ -102,7 +103,7 @@ class TFCurve(Curve):
 
     def setVisible(self, visibility=True):
         super().setVisible(visibility=visibility)
-        for plot in self.plot[0:2]+self.plot[2]:   #TODO: Revisar si funciona esa concatenacion
+        for plot in self.plot[0:2]+self.plot[2]:
             if plot is not None:
                 plot.set_visible(self.visibility)
 
@@ -119,34 +120,58 @@ class TFCurve(Curve):
             self.plot[1].set_xdata(self.plot[1].get_xdata()*mux)
 
     def delete(self):
-        for plot in self.plot[0:2]+self.plot[2]:   #TODO: Revisar si funciona esa concatenacion
+        for plot in self.plot[0:2]+self.plot[2]:
             if plot is not None:
                 plot.remove()
 
 # Curva a partir de archhivo (.txt o .csv)
+# mode: 0  Frecuencia   |   Modulo      |   Fase
+#       1  Tiempo       |   Magnitud
+# freqUnits: Unidad en la que se interpreta el eje de la frecuencia. (Hz/rads)
+# plotUnits: Unidad en la que se grafica la función. (Hz/rads)
 class FileCurve(Curve):
 
-    def __init__(self, name: str, path: str, mode: int, axes, visibility=True):
+    def __init__(self, name: str, path: str, mode: int, axes, freqUnits='Hz', plotUnits='Hz', visibility=True):
         super().__init__(name, axes, visibility=visibility)
         self.plot = [None, None, None]    # [ Magnitude, Phase, time ]
+        self.units = plotUnits
         self.mode = mode
         self.data = getDataFromFile(path, mode)
+
+        if freqUnits == 'rads':
+            self.data['freq'] /= 2*np.pi    # Trabajamos siempre con Hz
 
         if mode == 0:   # En frecuencia
 
             if len(self.data["frec"]) > 1:
-                freq = self.data["frec"]
+                style = 'solid'
+                color = 'grey'
+                zorder = 1
+                #TODO: label
+                ampSegments = [ list(zip(x, y)) for x,y in zip(self.data['frec'], self.data['amp']) ]
+                phaseSegments = [ list(zip(x, y)) for x,y in zip(self.data['frec'], self.data['phase']) ]
+                ampLines = LineCollection(ampSegments, colors=color, linestyles=style, zorder=zorder, label=self.name)
+                phaseLines = LineCollection(phaseSegments, colors=color, linestyles=style, zorder=zorder, label=self.name)
+                mag = axes[0].add_collection(ampLines)
+                phase = axes[1].add_collection(phaseLines)
 
-                mag, = axes[0].plot(freq, self.data["amp"], label=name)
-                phase, = axes[1].plot(freq, self.data["phase"], label=name)
                 self.plot = [mag, phase, None]
-            else:
-                #TODO: Ver caso MonteCarlo
-                pass
 
         else:   # En el tiempo
-            time, = axes[2].plot(self.data["time"], self.data["y"], label=name)
+
+            if len(self.data['time']) > 1:
+                style = 'solid'
+                color = 'grey'
+                zorder = 1
+                #TODO: label
+                segments = [ list(zip(x, y)) for x,y in zip(self.data['time'], self.data['y']) ]
+                lines = LineCollection(segments, colors=color, linestyles=style, zorder=zorder)
+                time = axes[2].add_collection(lines)
+            else:
+                time, = axes[2].plot(self.data["time"][0], self.data["y"][0], label=name)
+            
             self.plot = [None, None, time]
+            
 
     def setName(self, name):
         super().setName(name)
@@ -159,6 +184,19 @@ class FileCurve(Curve):
         for plot in self.plot:
             if plot is not None:
                 plot.set_visible(self.visibility)
+
+    def setXUnits(self, units):
+        if self.mode == 0 and units != self.units:
+            self.units = units
+            if units == 'Hz':
+                mux = 1/(2*np.pi)
+            elif units == 'rads':
+                mux = 2*np.pi
+            else:
+                raise ValueError("Units not supported")
+
+            # self.plot[0].set_xdata(self.plot[0].get_xdata()*mux)  #TODO: Ojo MonteCarlo. Ver opcion de units en los ejes
+            # self.plot[1].set_xdata(self.plot[1].get_xdata()*mux)
 
     def delete(self):
         for plot in self.plot:
@@ -198,8 +236,8 @@ class ExcitCurve(Curve):
     # Devuelve (x, y) con la respuesta a la excitación del sistema lti
     def getResponse(self, lti: ss.lti):
 
-        if self.type == 1:            # escalon
-            t, y = ss.step(lti, T=self.plot.get_xdata())        #https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.step.html#scipy.signal.step
+        if self.type == 1:            # escalon     (Descarta primer valor poque empieza con [0, 0, ...])
+            t, y = ss.step(lti, T=self.plot.get_xdata()[1:])        #https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.step.html#scipy.signal.step
             y *= self.amp  
 
         elif self.type == 3:          # impulso
